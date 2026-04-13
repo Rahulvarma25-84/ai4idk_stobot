@@ -6,7 +6,9 @@ Sends alerts via Telegram Bot API. No external library needed.
 import logging
 import os
 import requests
-from typing import Optional
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
