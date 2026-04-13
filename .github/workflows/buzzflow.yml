@@ -1,0 +1,104 @@
+name: BuzzFlow Automated Trading System
+
+on:
+  schedule:
+    # Morning scan: 8:30 AM IST = 3:00 UTC (Mon-Fri)
+    - cron: "0 3 * * 1-5"
+    # Midday monitor: 12:30 PM IST = 7:00 UTC (Mon-Fri)
+    - cron: "0 7 * * 1-5"
+    # Afternoon monitor: 2:30 PM IST = 9:00 UTC (Mon-Fri)
+    - cron: "0 9 * * 1-5"
+
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode: scan | monitor | both"
+        required: true
+        default: "both"
+      index:
+        description: "Index to scan: nifty_50 | bank_nifty | nifty_it | all"
+        required: false
+        default: "nifty_50"
+
+jobs:
+  morning-scan:
+    name: Morning Scan (8:30 AM IST)
+    runs-on: ubuntu-latest
+    # Only run at 3:00 UTC or when manually triggered with scan/both
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 3 * * 1-5') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.mode == 'scan' || github.event.inputs.mode == 'both'))
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run morning scan
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          BUZZFLOW_DB: buzzflow.db
+        run: |
+          python scanner_v2.py \
+            --index ${{ github.event.inputs.index || 'nifty_50' }} \
+            --min-score 60 \
+            --max-results 10 \
+            --auto-watchlist \
+            --alert
+
+      - name: Upload database artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: buzzflow-db-${{ github.run_id }}
+          path: buzzflow.db
+          retention-days: 7
+
+  monitor:
+    name: Position Monitor
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule != '0 3 * * 1-5') ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.mode == 'monitor' || github.event.inputs.mode == 'both'))
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Download latest database
+        uses: actions/download-artifact@v4
+        with:
+          name: buzzflow-db-${{ github.run_id }}
+          path: .
+        continue-on-error: true  # First run won't have artifact
+
+      - name: Run position monitor
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          BUZZFLOW_DB: buzzflow.db
+        run: python monitor.py
+
+      - name: Upload updated database
+        uses: actions/upload-artifact@v4
+        with:
+          name: buzzflow-db-${{ github.run_id }}
+          path: buzzflow.db
+          retention-days: 7

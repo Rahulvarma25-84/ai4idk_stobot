@@ -1,0 +1,383 @@
+2026-04-09 22:43:56,374 - INFO - Analyzing stock: SUZLON.NS
+2026-04-09 22:43:56,374 - INFO - Fetching current price for SUZLON.NS
+2026-04-09 22:43:57,270 - INFO - Fetched from history: 44.22999954223633
+2026-04-09 22:43:58,437 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:43:58,437 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:43:58,441 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:43:58,448 - INFO - MACD: -0.1794, Signal: -0.7129, Hist: 0.5335
+2026-04-09 22:43:58,452 - INFO - VWAP: 44.1780, Close: 44.2300, Ratio: 1.0012
+2026-04-09 22:43:58,566 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:43:58,566 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:43:58,566 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:43:58,575 - INFO - MACD: -0.1794, Signal: -0.7129, Hist: 0.5335
+2026-04-09 22:43:58,580 - INFO - VWAP: 44.1780, Close: 44.2300, Ratio: 1.0012
+2026-04-09 22:43:58,706 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:43:58,706 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:43:58,706 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:43:59,760 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-09 22:44:01,363 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-09 22:44:02,198 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-09 22:44:03,064 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-09 22:44:03,786 - ERROR - Error fetching news articles: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-09 22:44:05,404 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-09 22:44:06,135 - ERROR - News API error: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-09 22:49:21,343 - INFO - Analyzing stock: SUZLON.NS
+2026-04-09 22:49:21,346 - INFO - Fetching current price for SUZLON.NS
+2026-04-09 22:49:22,733 - INFO - Fetched from history: 44.22999954223633
+2026-04-09 22:49:23,300 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:49:23,302 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:49:23,305 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:49:23,308 - INFO - MACD: -0.1794, Signal: -0.7129, Hist: 0.5335
+2026-04-09 22:49:23,308 - INFO - VWAP: 44.1780, Close: 44.2300, Ratio: 1.0012
+2026-04-09 22:49:23,409 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:49:23,409 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:49:23,409 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:49:23,416 - INFO - MACD: -0.1794, Signal: -0.7129, Hist: 0.5335
+2026-04-09 22:49:23,418 - INFO - VWAP: 44.1780, Close: 44.2300, Ratio: 1.0012
+2026-04-09 22:49:23,511 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:49:23,511 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:49:23,514 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:49:27,716 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-09 22:49:28,847 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-09 22:49:29,909 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-09 22:49:30,843 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-09 22:49:31,664 - ERROR - Error fetching news articles: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-09 22:49:33,382 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-09 22:49:34,292 - ERROR - News API error: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-09 22:53:14,822 - INFO - Analyzing stock: SUZLON.NS
+2026-04-09 22:53:14,827 - INFO - Fetching current price for SUZLON.NS
+2026-04-09 22:53:15,807 - INFO - Fetched from history: 44.22999954223633
+2026-04-09 22:53:16,503 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:53:16,503 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:53:16,505 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:53:16,518 - INFO - MACD: -0.1794, Signal: -0.7129, Hist: 0.5335
+2026-04-09 22:53:16,521 - INFO - VWAP: 44.1780, Close: 44.2300, Ratio: 1.0012
+2026-04-09 22:53:16,638 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:53:16,638 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:53:16,638 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:53:16,638 - INFO - MACD: -0.1794, Signal: -0.7129, Hist: 0.5335
+2026-04-09 22:53:16,649 - INFO - VWAP: 44.1780, Close: 44.2300, Ratio: 1.0012
+2026-04-09 22:53:16,760 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-09 22:53:16,760 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-09 22:53:16,760 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-09 22:53:17,626 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-09 22:53:18,636 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-09 22:53:19,400 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-09 22:53:20,177 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-09 22:53:22,606 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-12 14:22:42,048 - INFO - Analyzing stock: SUZLON.NS
+2026-04-12 14:22:42,050 - INFO - Fetching current price for SUZLON.NS
+2026-04-12 14:22:43,039 - INFO - Fetched from history: 45.31999969482422
+2026-04-12 14:22:44,549 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-12 14:22:44,551 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-12 14:22:44,552 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-12 14:22:44,559 - INFO - MACD: 0.0935, Signal: -0.5517, Hist: 0.6452
+2026-04-12 14:22:44,559 - INFO - VWAP: 44.0823, Close: 45.3200, Ratio: 1.0281
+2026-04-12 14:22:44,750 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-12 14:22:44,750 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-12 14:22:44,752 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-12 14:22:44,753 - INFO - MACD: 0.0935, Signal: -0.5517, Hist: 0.6452
+2026-04-12 14:22:44,753 - INFO - VWAP: 44.0823, Close: 45.3200, Ratio: 1.0281
+2026-04-12 14:22:44,958 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-12 14:22:44,958 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-12 14:22:44,959 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-12 14:22:45,972 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-12 14:22:46,813 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-12 14:22:47,712 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-12 14:22:48,534 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-12 14:22:51,194 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-14 00:40:20,627 - INFO - Analyzing stock: SUZLON.NS
+2026-04-14 00:40:20,629 - INFO - Fetching current price for SUZLON.NS
+2026-04-14 00:40:24,665 - INFO - Fetched from history: 45.86000061035156
+2026-04-14 00:40:26,094 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-14 00:40:26,094 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:40:26,094 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:40:26,107 - INFO - MACD: 0.3113, Signal: -0.3728, Hist: 0.6840
+2026-04-14 00:40:26,109 - INFO - VWAP: 44.0379, Close: 45.3200, Ratio: 1.0291
+2026-04-14 00:40:26,203 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-14 00:40:26,203 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:40:26,203 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:40:26,208 - INFO - MACD: 0.3113, Signal: -0.3728, Hist: 0.6840
+2026-04-14 00:40:26,211 - INFO - VWAP: 44.0379, Close: 45.3200, Ratio: 1.0291
+2026-04-14 00:40:26,402 - INFO - Successfully fetched 60 rows for SUZLON.NS
+2026-04-14 00:40:26,402 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:40:26,402 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:40:27,510 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-14 00:40:28,358 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-14 00:40:29,148 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-14 00:40:29,979 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-14 00:40:32,424 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-14 00:41:10,439 - INFO - Analyzing stock: BEL.NS
+2026-04-14 00:41:10,442 - INFO - Fetching current price for BEL.NS
+2026-04-14 00:41:11,458 - INFO - Fetched from history: 441.54998779296875
+2026-04-14 00:41:12,343 - INFO - Successfully fetched 60 rows for BEL.NS
+2026-04-14 00:41:12,343 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:41:12,343 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:41:12,349 - INFO - MACD: -0.1972, Signal: -3.2088, Hist: 3.0116
+2026-04-14 00:41:12,355 - INFO - VWAP: 434.9755, Close: 442.4500, Ratio: 1.0172
+2026-04-14 00:41:12,462 - INFO - Successfully fetched 60 rows for BEL.NS
+2026-04-14 00:41:12,477 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:41:12,477 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:41:12,477 - INFO - MACD: -0.1972, Signal: -3.2088, Hist: 3.0116
+2026-04-14 00:41:12,477 - INFO - VWAP: 434.9755, Close: 442.4500, Ratio: 1.0172
+2026-04-14 00:41:12,575 - INFO - Successfully fetched 60 rows for BEL.NS
+2026-04-14 00:41:12,575 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:41:12,575 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:41:13,488 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-14 00:41:14,306 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-14 00:41:15,128 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-14 00:41:16,147 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-14 00:41:18,816 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-14 00:42:48,620 - INFO - Analyzing stock: MAHABANK.NS
+2026-04-14 00:42:48,620 - INFO - Fetching current price for MAHABANK.NS
+2026-04-14 00:42:50,152 - INFO - Fetched from history: 70.13999938964844
+2026-04-14 00:42:50,756 - INFO - Successfully fetched 60 rows for MAHABANK.NS
+2026-04-14 00:42:50,756 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:42:50,758 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:42:50,762 - INFO - MACD: 0.7275, Signal: -0.1361, Hist: 0.8636
+2026-04-14 00:42:50,762 - INFO - VWAP: 67.2172, Close: 70.5900, Ratio: 1.0502
+2026-04-14 00:42:50,887 - INFO - Successfully fetched 60 rows for MAHABANK.NS
+2026-04-14 00:42:50,887 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:42:50,889 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:42:50,890 - INFO - MACD: 0.7275, Signal: -0.1361, Hist: 0.8636
+2026-04-14 00:42:50,890 - INFO - VWAP: 67.2172, Close: 70.5900, Ratio: 1.0502
+2026-04-14 00:42:51,073 - INFO - Successfully fetched 60 rows for MAHABANK.NS
+2026-04-14 00:42:51,073 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 00:42:51,073 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 00:42:52,089 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-14 00:42:52,815 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-14 00:42:53,738 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-14 00:42:54,560 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-14 00:42:57,163 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-14 01:03:49,012 - INFO - Analyzing stock: BELRISE.NS
+2026-04-14 01:03:49,014 - INFO - Fetching current price for BELRISE.NS
+2026-04-14 01:03:50,243 - INFO - Fetched from history: 204.4199981689453
+2026-04-14 01:03:50,921 - INFO - Successfully fetched 60 rows for BELRISE.NS
+2026-04-14 01:03:50,921 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 01:03:50,922 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 01:03:50,924 - INFO - MACD: 4.6660, Signal: 2.8425, Hist: 1.8235
+2026-04-14 01:03:50,924 - INFO - VWAP: 185.0227, Close: 206.0900, Ratio: 1.1139
+2026-04-14 01:03:51,127 - INFO - Successfully fetched 60 rows for BELRISE.NS
+2026-04-14 01:03:51,127 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 01:03:51,131 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 01:03:51,133 - INFO - MACD: 4.6660, Signal: 2.8425, Hist: 1.8235
+2026-04-14 01:03:51,138 - INFO - VWAP: 185.0227, Close: 206.0900, Ratio: 1.1139
+2026-04-14 01:03:51,220 - INFO - Successfully fetched 60 rows for BELRISE.NS
+2026-04-14 01:03:51,220 - INFO - Data columns: ['Open', 'High', 'Low', 'Close', 'Volume', 'Dividends', 'Stock Splits']
+2026-04-14 01:03:51,220 - INFO - Data types: Open            float64
+High            float64
+Low             float64
+Close           float64
+Volume            int64
+Dividends       float64
+Stock Splits    float64
+dtype: object
+2026-04-14 01:03:52,438 - WARNING - Error fetching from r/stocks: received 401 HTTP response
+2026-04-14 01:03:55,612 - WARNING - Error fetching from r/investing: received 401 HTTP response
+2026-04-14 01:03:56,944 - WARNING - Error fetching from r/wallstreetbets: received 401 HTTP response
+2026-04-14 01:03:58,335 - WARNING - Error fetching from r/indianstreetbets: received 401 HTTP response
+2026-04-14 01:04:02,372 - ERROR - Reddit API error: received 401 HTTP response
+2026-04-14 02:08:26,315 - INFO - Database initialized.
+2026-04-14 02:08:26,318 - INFO - Database initialized.
+2026-04-14 02:08:26,318 - WARNING - Telegram not configured. Alerts will only be logged.
+2026-04-14 02:08:27,760 - INFO - Scanning 3 stocks in test...
+2026-04-14 02:08:28,698 - INFO - Fetched 8 headlines for 'INFY stock India'
+2026-04-14 02:08:29,136 - INFO - Fetched 8 headlines for 'HDFCBANK stock India'
+2026-04-14 02:08:29,450 - INFO - Fetched 8 headlines for 'INFY NSE'
+2026-04-14 02:08:29,718 - INFO - Fetched 8 headlines for 'TCS stock India'
+2026-04-14 02:08:30,225 - INFO - Fetched 8 headlines for 'HDFCBANK NSE'
+2026-04-14 02:08:30,545 - INFO - Fetched 8 headlines for 'INFY stock'
+2026-04-14 02:08:30,722 - INFO - Fetched 8 headlines for 'TCS NSE'
+2026-04-14 02:08:31,541 - INFO - Fetched 8 headlines for 'HDFCBANK stock'
+2026-04-14 02:08:31,767 - INFO - Fetched 8 headlines for 'TCS stock'
+2026-04-14 02:08:50,453 - INFO - Database initialized.
+2026-04-14 02:08:50,458 - INFO - Database initialized.
+2026-04-14 02:08:50,458 - WARNING - Telegram not configured. Alerts will only be logged.
+2026-04-14 02:08:52,204 - INFO - Fetched 8 headlines for 'INFY stock India'
+2026-04-14 02:08:52,602 - INFO - Fetched 8 headlines for 'INFY NSE'
+2026-04-14 02:08:53,185 - INFO - Fetched 8 headlines for 'INFY stock'
+2026-04-14 02:09:35,430 - INFO - Database initialized.
+2026-04-14 02:09:35,433 - INFO - Database initialized.
+2026-04-14 02:09:35,435 - WARNING - Telegram not configured. Alerts will only be logged.
+2026-04-14 02:09:37,591 - INFO - Fetched 8 headlines for 'INFY stock India'
+2026-04-14 02:09:38,529 - INFO - Fetched 8 headlines for 'INFY NSE'
+2026-04-14 02:09:39,664 - INFO - Fetched 8 headlines for 'Infosys stock'
+2026-04-14 02:10:39,648 - INFO - Database initialized.
+2026-04-14 02:10:39,650 - INFO - Database initialized.
+2026-04-14 02:10:39,650 - WARNING - Telegram not configured. Alerts will only be logged.
+2026-04-14 02:10:41,326 - INFO - Fetched 8 headlines for 'INFY stock India'
+2026-04-14 02:10:41,715 - INFO - Fetched 8 headlines for 'INFY NSE'
+2026-04-14 02:10:42,845 - INFO - Fetched 8 headlines for 'INFY stock'
+2026-04-14 02:11:31,032 - INFO - Database initialized.
+2026-04-14 02:11:31,035 - INFO - Database initialized.
+2026-04-14 02:11:31,035 - WARNING - Telegram not configured. Alerts will only be logged.
+2026-04-14 02:11:32,766 - INFO - Fetched 8 headlines for 'INFY stock India'
+2026-04-14 02:11:33,198 - INFO - Fetched 8 headlines for 'INFY NSE'
+2026-04-14 02:11:33,553 - INFO - Fetched 8 headlines for 'INFY stock'
+2026-04-14 02:17:15,388 - INFO - Database initialized.
+2026-04-14 02:35:43,897 - INFO - Database initialized.
+2026-04-14 02:35:43,898 - INFO - Database initialized.
+2026-04-14 02:35:47,181 - INFO - Fetched 8 headlines for 'TCS stock India'
+2026-04-14 02:35:47,762 - INFO - Fetched 8 headlines for 'TCS NSE'
+2026-04-14 02:35:48,581 - INFO - Fetched 8 headlines for 'TCS stock'
