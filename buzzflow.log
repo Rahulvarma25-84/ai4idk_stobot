@@ -381,3 +381,5 @@ dtype: object
 2026-04-14 02:35:47,181 - INFO - Fetched 8 headlines for 'TCS stock India'
 2026-04-14 02:35:47,762 - INFO - Fetched 8 headlines for 'TCS NSE'
 2026-04-14 02:35:48,581 - INFO - Fetched 8 headlines for 'TCS stock'
+2026-04-14 03:05:27,995 - INFO - Database initialized.
+2026-04-14 03:05:28,008 - INFO - Database initialized.

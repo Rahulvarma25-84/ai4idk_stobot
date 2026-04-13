@@ -16,9 +16,9 @@ on:
         required: true
         default: "both"
       index:
-        description: "Index to scan: nifty_50 | bank_nifty | nifty_it | all"
+        description: "Sector: nifty_50 | banking | nifty_it | pharma | auto | capex | consumption | metals | midcap_quality | all"
         required: false
-        default: "nifty_50"
+        default: "all"
 
 jobs:
   morning-scan:
@@ -49,7 +49,7 @@ jobs:
           BUZZFLOW_DB: buzzflow.db
         run: |
           python scanner_v2.py \
-            --index ${{ github.event.inputs.index || 'nifty_50' }} \
+            --index ${{ github.event.inputs.index || 'all' }} \
             --min-score 60 \
             --max-results 10 \
             --auto-watchlist \

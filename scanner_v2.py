@@ -62,13 +62,20 @@ class ScanResult:
 
 class ScannerV2:
     """
-    Upgraded scanner using the new architecture:
-    - Google News RSS for sentiment (free, no limits)
-    - ScoringEngine for entry/exit scoring
-    - WatchlistEngine for persistence
-    - AlertEngine for Telegram
+    Stock universe designed for swing trading (3–15 day holds).
+
+    Selection criteria (think like a fund manager):
+    - F&O eligible = institutional interest + clean price discovery
+    - Sector leaders only = best liquidity, best news coverage
+    - No PSU banks below top 3 = too policy-driven, unpredictable
+    - No micro/smallcap = wide spreads, low volume, hard to exit
+    - Grouped by sector so you can scan one sector when it's in play
+
+    Universe: ~120 stocks across 8 sectors + 2 focused lists
     """
 
+    # ── LARGE CAP CORE (most liquid, highest institutional activity) ──────
+    # Full Nifty 50 — always scan these, every day, no exceptions
     NIFTY_50 = [
         "RELIANCE.NS", "TCS.NS", "HDFCBANK.NS", "INFY.NS", "ICICIBANK.NS",
         "HINDUNILVR.NS", "ITC.NS", "SBIN.NS", "BHARTIARTL.NS", "KOTAKBANK.NS",
@@ -82,21 +89,114 @@ class ScannerV2:
         "ADANIPORTS.NS", "TATAPOWER.NS", "M&M.NS", "BAJAJ-AUTO.NS", "SHREECEM.NS"
     ]
 
-    BANK_NIFTY = [
+    # ── BANKING & FINANCIALS ──────────────────────────────────────────────
+    # Top liquid banks + quality NBFCs — most active swing trading sector
+    # Dropped: PNB, UNIONBANK, SAIL-type PSUs (too news-driven, gap risk)
+    BANKING = [
         "HDFCBANK.NS", "ICICIBANK.NS", "SBIN.NS", "KOTAKBANK.NS", "AXISBANK.NS",
-        "INDUSINDBK.NS", "BANDHANBNK.NS", "FEDERALBNK.NS", "RBLBANK.NS", "PNB.NS",
-        "UNIONBANK.NS", "IDFCFIRSTB.NS", "AUBANK.NS"
+        "INDUSINDBK.NS", "FEDERALBNK.NS", "IDFCFIRSTB.NS", "AUBANK.NS", "BANDHANBNK.NS",
+        "BAJFINANCE.NS", "BAJAJFINSV.NS", "CHOLAFIN.NS", "MUTHOOTFIN.NS", "MANAPPURAM.NS",
+        "LICHSGFIN.NS", "M&MFIN.NS", "SBILIFE.NS", "HDFCLIFE.NS", "ICICIPRULI.NS"
     ]
 
+    # ── INFORMATION TECHNOLOGY ───────────────────────────────────────────
+    # All F&O IT stocks — sector moves together, good for sector plays
     NIFTY_IT = [
         "TCS.NS", "INFY.NS", "HCLTECH.NS", "WIPRO.NS", "TECHM.NS",
         "LTIM.NS", "MPHASIS.NS", "COFORGE.NS", "PERSISTENT.NS", "OFSS.NS"
     ]
 
+    # ── PHARMA & HEALTHCARE ──────────────────────────────────────────────
+    # Sector leaders + mid-pharma with strong export stories
+    # Dropped: NATCOPHARM, IPCALAB (low liquidity for swing)
+    PHARMA = [
+        "SUNPHARMA.NS", "DRREDDY.NS", "CIPLA.NS", "DIVISLAB.NS", "LUPIN.NS",
+        "AUROPHARMA.NS", "TORNTPHARM.NS", "ALKEM.NS", "ZYDUSLIFE.NS", "GLENMARK.NS",
+        "APOLLOHOSP.NS", "LAURUSLABS.NS", "ABBOTINDIA.NS", "BIOCON.NS"
+    ]
+
+    # ── AUTO & AUTO ANCILLARIES ──────────────────────────────────────────
+    # OEMs + top ancillaries — EV theme + rural demand plays
+    # Dropped: GPPL, low-volume ancillaries
+    AUTO = [
+        "MARUTI.NS", "TATAMOTORS.NS", "M&M.NS", "BAJAJ-AUTO.NS", "HEROMOTOCO.NS",
+        "EICHERMOT.NS", "TVSMOTOR.NS", "ASHOKLEY.NS", "MOTHERSON.NS", "BHARATFORG.NS",
+        "BALKRISIND.NS", "APOLLOTYRE.NS", "BOSCHLTD.NS", "TIINDIA.NS"
+    ]
+
+    # ── CAPITAL GOODS & INFRA ────────────────────────────────────────────
+    # Capex cycle plays — government spending theme
+    # Best swing candidates when infra budget news hits
+    CAPEX = [
+        "LT.NS", "ABB.NS", "SIEMENS.NS", "BHEL.NS", "CUMMINSIND.NS",
+        "HAVELLS.NS", "POLYCAB.NS", "DIXON.NS", "ADANIPORTS.NS", "CONCOR.NS",
+        "IRCTC.NS", "INDUSTOWER.NS", "JSWENERGY.NS", "TATAPOWER.NS", "NTPC.NS",
+        "POWERGRID.NS", "ADANIGREEN.NS"
+    ]
+
+    # ── CONSUMPTION & FMCG ──────────────────────────────────────────────
+    # Defensive + discretionary — good when market is uncertain
+    CONSUMPTION = [
+        "HINDUNILVR.NS", "ITC.NS", "NESTLEIND.NS", "BRITANNIA.NS", "DABUR.NS",
+        "MARICO.NS", "GODREJCP.NS", "COLPAL.NS", "TATACONSUM.NS", "TITAN.NS",
+        "DMART.NS", "JUBLFOOD.NS", "VBL.NS", "MCDOWELL-N.NS", "PAGEIND.NS"
+    ]
+
+    # ── METALS & COMMODITIES ─────────────────────────────────────────────
+    # Cyclical — scan only when global commodity cycle is up
+    # Dropped: MOIL, WELCORP, JINDALSAW (low F&O interest)
+    METALS = [
+        "TATASTEEL.NS", "JSWSTEEL.NS", "HINDALCO.NS", "VEDL.NS", "COALINDIA.NS",
+        "NMDC.NS", "SAIL.NS", "NATIONALUM.NS", "HINDCOPPER.NS", "APLAPOLLO.NS"
+    ]
+
+    # ── QUALITY MIDCAP (F&O eligible, high institutional interest) ───────
+    # Hand-picked midcaps with strong fundamentals + good swing setups
+    # These are NOT random midcaps — each is a sector leader in its space
+    MIDCAP_QUALITY = [
+        "PIDILITIND.NS", "ASTRAL.NS", "DEEPAKNTR.NS", "NAVINFLUOR.NS", "SRF.NS",
+        "LALPATHLAB.NS", "METROPOLIS.NS", "INDIAMART.NS", "NAUKRI.NS", "OBEROIRLTY.NS",
+        "DLF.NS", "GODREJPROP.NS", "BERGEPAINT.NS", "KANSAINER.NS", "INDIGO.NS",
+        "TVSMOTOR.NS", "MPHASIS.NS", "COFORGE.NS", "LTTS.NS", "PERSISTENT.NS"
+    ]
+
+    # ── SMART UNIVERSE (default for 'all') ───────────────────────────────
+    # Nifty 50 + best picks from each sector = ~120 unique, liquid stocks
+    # This is what a fund manager would actually screen daily
+    @classmethod
+    def _build_all(cls) -> list:
+        seen = set()
+        result = []
+        for lst in [
+            cls.NIFTY_50,      # 50  — always core
+            cls.BANKING,       # +10 new (rest overlap with N50)
+            cls.NIFTY_IT,      # +5  new
+            cls.PHARMA,        # +9  new
+            cls.AUTO,          # +4  new
+            cls.CAPEX,         # +7  new
+            cls.CONSUMPTION,   # +5  new
+            cls.METALS,        # +5  new
+            cls.MIDCAP_QUALITY # +15 new
+        ]:
+            for s in lst:
+                if s not in seen:
+                    seen.add(s)
+                    result.append(s)
+        return result  # ~110 unique stocks
+
     INDICES = {
-        "nifty_50": NIFTY_50,
-        "bank_nifty": BANK_NIFTY,
-        "nifty_it": NIFTY_IT
+        # Scan by sector when that sector is in play
+        "nifty_50":       NIFTY_50,
+        "banking":        BANKING,
+        "nifty_it":       NIFTY_IT,
+        "pharma":         PHARMA,
+        "auto":           AUTO,
+        "capex":          CAPEX,
+        "consumption":    CONSUMPTION,
+        "metals":         METALS,
+        "midcap_quality": MIDCAP_QUALITY,
+        # Scan everything — morning routine
+        # "all" is handled via _build_all() in scan()
     }
 
     def __init__(self):
@@ -303,8 +403,8 @@ class ScannerV2:
         Run a full scan on the given index.
         Returns top results sorted by entry_score.
         """
-        stocks = self.INDICES.get(index, self.NIFTY_50)
-        logger.info(f"Scanning {len(stocks)} stocks in {index}...")
+        stocks = self.INDICES.get(index) or self._build_all()
+        logger.info(f"Scanning {len(stocks)} stocks in '{index}'...")
 
         results = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as ex:
@@ -374,8 +474,12 @@ class ScannerV2:
 
 def main():
     parser = argparse.ArgumentParser(description="BuzzFlow v2 - Stock Scanner")
-    parser.add_argument("--index", choices=["nifty_50", "bank_nifty", "nifty_it", "all"],
-                        default="nifty_50")
+    parser.add_argument("--index",
+                        choices=["nifty_50", "banking", "nifty_it", "pharma",
+                                 "auto", "capex", "consumption", "metals",
+                                 "midcap_quality", "all"],
+                        default="all",
+                        help="Sector to scan (default: all = ~110 curated stocks)")
     parser.add_argument("--min-score", type=float, default=55)
     parser.add_argument("--max-results", type=int, default=10)
     parser.add_argument("--portfolio", type=float, default=100000)
@@ -400,7 +504,6 @@ def main():
         )
         scanner.print_report(results, idx)
         all_results.extend(results)
-
     if args.alert and all_results:
         scanner.send_scan_alert(all_results)
 
