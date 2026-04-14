@@ -18,6 +18,12 @@ __pycache__/
 dist/
 build/
 
+# Node / React
+dashboard/ui/node_modules/
+dashboard/ui/dist/
+dashboard/ui/.vite/
+node_modules/
+
 # IDE
 .vscode/
 .idea/
