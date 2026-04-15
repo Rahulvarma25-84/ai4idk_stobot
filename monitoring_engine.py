@@ -115,6 +115,17 @@ class MonitoringEngine:
 
             current_price = tech["current_price"]
 
+            # ── Sanity check: skip invalid watchlist entries ───────────────
+            # SL must be below entry, target must be above entry
+            if stop_loss >= entry_price:
+                logger.warning(f"SKIPPING {symbol}: SL ₹{stop_loss} >= Entry ₹{entry_price} — invalid entry, removing")
+                self.watchlist.close_position(symbol, entry_price, exit_reason="INVALID_ENTRY", entry_price=entry_price)
+                continue
+            if target <= entry_price:
+                logger.warning(f"SKIPPING {symbol}: Target ₹{target} <= Entry ₹{entry_price} — invalid entry, removing")
+                self.watchlist.close_position(symbol, entry_price, exit_reason="INVALID_ENTRY", entry_price=entry_price)
+                continue
+
             # Hard stop-loss / target hit check
             if current_price <= stop_loss:
                 pnl = round(((current_price - entry_price) / entry_price) * 100, 2)
