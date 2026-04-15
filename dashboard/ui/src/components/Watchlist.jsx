@@ -4,34 +4,28 @@ import { useToast } from "../hooks/useToast";
 import AddStockModal from "./AddStockModal";
 import ClosePositionModal from "./ClosePositionModal";
 
+const STATE_BADGE  = { STRONG:"badge-green", NEUTRAL:"badge-blue", WEAK:"badge-red" };
+const ACTION_STYLE = { HOLD:"pos", MONITOR:"neu", CAUTION:"text-yellow", EXIT:"neg" };
 const STATUS_BADGE = { WATCH:"badge-blue", BUY:"badge-green", CAUTION:"badge-yellow", EXIT:"badge-red", HOLD:"badge-muted", CLOSED:"badge-muted" };
-const CONF_BADGE   = { high:"badge-green", medium:"badge-yellow", low:"badge-muted" };
 
 function ProgressBar({ entry, current, sl, target }) {
   if (!current || !entry || !sl || !target || sl >= entry || target <= entry) return null;
   const range = target - sl;
   const pos   = Math.max(0, Math.min(100, ((current - sl) / range) * 100));
-  const entryPos = Math.max(0, Math.min(100, ((entry - sl) / range) * 100));
+  const ep    = Math.max(0, Math.min(100, ((entry  - sl) / range) * 100));
   const color = current >= entry ? "var(--green)" : "var(--red)";
   return (
     <div className="progress-wrap">
-      <div className="progress-fill" style={{ width: `${pos}%`, background: color }} />
-      <div className="progress-marker" style={{ left: `${entryPos}%` }} />
+      <div className="progress-fill" style={{ width:`${pos}%`, background:color }} />
+      <div className="progress-marker" style={{ left:`${ep}%` }} />
     </div>
   );
 }
 
-function ScoreBar({ score }) {
-  if (!score) return <span className="neu">—</span>;
-  const color = score >= 70 ? "var(--green)" : score >= 55 ? "var(--yellow)" : "var(--red)";
-  return (
-    <div className="score-bar">
-      <span style={{ color, fontWeight: 600, minWidth: 32 }}>{score.toFixed(0)}</span>
-      <div className="score-track">
-        <div className="score-fill" style={{ width: `${score}%`, background: color }} />
-      </div>
-    </div>
-  );
+function ScoreCell({ value, thresholds = [70, 50] }) {
+  if (value == null) return <span className="neu">—</span>;
+  const color = value >= thresholds[0] ? "var(--green)" : value >= thresholds[1] ? "var(--yellow)" : "var(--red)";
+  return <span style={{ color, fontWeight:600 }}>{value.toFixed(0)}</span>;
 }
 
 export default function Watchlist() {
@@ -42,16 +36,16 @@ export default function Watchlist() {
   const [monitoring, setMonitoring] = useState(false);
   const toast = useToast();
 
-  const items = data || [];
+  const items  = data || [];
   const active = items.filter(w => !["CLOSED","EXIT"].includes(w.status));
   const filtered = filter === "active" ? active
     : filter === "closed" ? items.filter(w => ["CLOSED","EXIT"].includes(w.status))
     : items;
 
-  // Summary stats
-  const totalPnl = active.filter(w => w.pnl_percent != null).reduce((s, w) => s + w.pnl_percent, 0);
-  const winners  = active.filter(w => w.pnl_percent > 0).length;
-  const losers   = active.filter(w => w.pnl_percent < 0).length;
+  const strong  = active.filter(w => w.trade_state === "STRONG").length;
+  const neutral = active.filter(w => w.trade_state === "NEUTRAL").length;
+  const weak    = active.filter(w => w.trade_state === "WEAK").length;
+  const openPnl = active.filter(w => w.pnl_percent != null).reduce((s,w) => s + w.pnl_percent, 0);
 
   async function changeStatus(symbol, status) {
     await api.patch(`/watchlist/${symbol}/status`, { status });
@@ -80,33 +74,34 @@ export default function Watchlist() {
 
   return (
     <div>
-      {/* Stats row */}
-      <div className="stats-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(150px,1fr))" }}>
+      {/* Stats */}
+      <div className="stats-grid">
         <div className="stat stat-blue">
           <div className="stat-label">Active Positions</div>
           <div className="stat-value">{active.length}</div>
-          <div className="stat-sub">{winners}W / {losers}L</div>
+          <div className="stat-sub">max 2 recommended</div>
         </div>
-        <div className={`stat ${totalPnl >= 0 ? "stat-green" : "stat-red"}`}>
-          <div className="stat-label">Open PnL</div>
-          <div className="stat-value" style={{ color: totalPnl >= 0 ? "var(--green)" : "var(--red)" }}>
-            {totalPnl >= 0 ? "+" : ""}{totalPnl.toFixed(1)}%
-          </div>
-          <div className="stat-sub">across all positions</div>
+        <div className="stat stat-green">
+          <div className="stat-label">Strong</div>
+          <div className="stat-value" style={{ color:"var(--green)" }}>{strong}</div>
+          <div className="stat-sub">exit score &lt; 30</div>
         </div>
         <div className="stat stat-yellow">
-          <div className="stat-label">Caution</div>
-          <div className="stat-value">{active.filter(w => w.status === "CAUTION").length}</div>
-          <div className="stat-sub">need attention</div>
+          <div className="stat-label">Neutral</div>
+          <div className="stat-value" style={{ color:"var(--yellow)" }}>{neutral}</div>
+          <div className="stat-sub">monitor only</div>
         </div>
-        <div className="stat stat-purple">
-          <div className="stat-label">Avg Score</div>
-          <div className="stat-value">
-            {active.filter(w => w.entry_score).length
-              ? (active.filter(w => w.entry_score).reduce((s,w) => s + w.entry_score, 0) / active.filter(w => w.entry_score).length).toFixed(0)
-              : "—"}
+        <div className="stat stat-red">
+          <div className="stat-label">Weak</div>
+          <div className="stat-value" style={{ color:"var(--red)" }}>{weak}</div>
+          <div className="stat-sub">action needed</div>
+        </div>
+        <div className={`stat ${openPnl >= 0 ? "stat-green" : "stat-red"}`}>
+          <div className="stat-label">Open PnL</div>
+          <div className="stat-value" style={{ color: openPnl >= 0 ? "var(--green)" : "var(--red)" }}>
+            {openPnl >= 0 ? "+" : ""}{openPnl.toFixed(1)}%
           </div>
-          <div className="stat-sub">entry quality</div>
+          <div className="stat-sub">unrealised</div>
         </div>
       </div>
 
@@ -114,7 +109,7 @@ export default function Watchlist() {
       <div className="section-header">
         <div>
           <div className="section-title">Watchlist</div>
-          <div className="section-sub">{active.length} active · {items.filter(w => ["CLOSED","EXIT"].includes(w.status)).length} closed</div>
+          <div className="section-sub">Trade state updates automatically on each monitor run</div>
         </div>
         <div className="section-actions">
           <button className="btn" onClick={runMonitor} disabled={monitoring}>
@@ -124,19 +119,16 @@ export default function Watchlist() {
         </div>
       </div>
 
-      {/* Filter pills */}
       <div className="pills">
         {["active","closed","all"].map(f => (
           <button key={f} className={`pill ${filter===f?"active":""}`} onClick={() => setFilter(f)}>
-            {f.charAt(0).toUpperCase()+f.slice(1)}
-            {f==="active" && ` (${active.length})`}
+            {f.charAt(0).toUpperCase()+f.slice(1)}{f==="active"?` (${active.length})`:""}
           </button>
         ))}
       </div>
 
-      {/* Table */}
       {filtered.length === 0 ? (
-        <div className="empty"><div className="empty-icon">📋</div><div className="empty-text">No stocks here. Add one to get started.</div></div>
+        <div className="empty"><div className="empty-icon">📋</div><div className="empty-text">No stocks. Add one to get started.</div></div>
       ) : (
         <div className="card">
           <div className="table-wrap">
@@ -144,51 +136,55 @@ export default function Watchlist() {
               <thead>
                 <tr>
                   <th>Symbol</th>
-                  <th className="right">Live Price</th>
+                  <th className="right">Live</th>
                   <th className="right">Entry</th>
-                  <th className="right">Stop Loss</th>
+                  <th className="right">SL</th>
                   <th className="right">Target</th>
                   <th className="right">PnL</th>
                   <th>Progress</th>
-                  <th>Score</th>
-                  <th>Confidence</th>
+                  <th className="right">Entry</th>
+                  <th className="right">Exit</th>
+                  <th className="right">Opp</th>
+                  <th>State</th>
+                  <th>Action</th>
                   <th>Status</th>
-                  <th>Added</th>
-                  <th>Actions</th>
+                  <th>Controls</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map(w => {
-                  const pnl = w.pnl_percent;
                   const isActive = !["CLOSED","EXIT"].includes(w.status);
+                  const pnl = w.pnl_percent;
                   return (
                     <tr key={w.id}>
                       <td>
-                        <div style={{ fontWeight: 600 }}>{w.symbol}</div>
-                        {w.company_name && <div style={{ fontSize: 11, color: "var(--muted)" }}>{w.company_name}</div>}
+                        <div style={{ fontWeight:600 }}>{w.symbol}</div>
+                        {w.company_name && <div style={{ fontSize:11, color:"var(--muted)" }}>{w.company_name}</div>}
                       </td>
-                      <td className="right" style={{ fontVariantNumeric: "tabular-nums" }}>
-                        {w.live_price ? <strong>₹{w.live_price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</strong> : <span className="neu">—</span>}
+                      <td className="right" style={{ fontVariantNumeric:"tabular-nums" }}>
+                        {w.live_price ? <strong>₹{w.live_price.toLocaleString("en-IN",{minimumFractionDigits:2})}</strong> : <span className="neu">—</span>}
                       </td>
-                      <td className="right" style={{ color: "var(--text2)", fontVariantNumeric: "tabular-nums" }}>₹{w.entry_price?.toFixed(2)}</td>
-                      <td className="right neg" style={{ fontVariantNumeric: "tabular-nums" }}>₹{w.stop_loss?.toFixed(2)}</td>
-                      <td className="right pos" style={{ fontVariantNumeric: "tabular-nums" }}>₹{w.target?.toFixed(2)}</td>
+                      <td className="right" style={{ color:"var(--text2)", fontVariantNumeric:"tabular-nums" }}>₹{w.entry_price?.toFixed(2)}</td>
+                      <td className="right neg" style={{ fontVariantNumeric:"tabular-nums" }}>₹{w.stop_loss?.toFixed(2)}</td>
+                      <td className="right pos" style={{ fontVariantNumeric:"tabular-nums" }}>₹{w.target?.toFixed(2)}</td>
                       <td className="right">
-                        {pnl != null
-                          ? <span className={pnl >= 0 ? "pos" : "neg"}>{pnl >= 0 ? "+" : ""}{pnl.toFixed(2)}%</span>
+                        {pnl != null ? <span className={pnl>=0?"pos":"neg"}>{pnl>=0?"+":""}{pnl.toFixed(2)}%</span> : <span className="neu">—</span>}
+                      </td>
+                      <td><ProgressBar entry={w.entry_price} current={w.live_price} sl={w.stop_loss} target={w.target} /></td>
+                      <td className="right"><ScoreCell value={w.entry_score} /></td>
+                      <td className="right"><ScoreCell value={w.exit_score} thresholds={[70, 40]} /></td>
+                      <td className="right"><ScoreCell value={w.opportunity_score} /></td>
+                      <td>
+                        {w.trade_state
+                          ? <span className={`badge ${STATE_BADGE[w.trade_state]||"badge-muted"}`}>{w.trade_state}</span>
                           : <span className="neu">—</span>}
                       </td>
                       <td>
-                        <ProgressBar entry={w.entry_price} current={w.live_price} sl={w.stop_loss} target={w.target} />
-                      </td>
-                      <td><ScoreBar score={w.entry_score} /></td>
-                      <td>
-                        {w.confidence
-                          ? <span className={`badge ${CONF_BADGE[w.confidence]||"badge-muted"}`}>{w.confidence}</span>
-                          : <span className="neu">—</span>}
+                        <span className={ACTION_STYLE[w.suggested_action] || "neu"} style={{ fontWeight:600, fontSize:12 }}>
+                          {w.suggested_action || "—"}
+                        </span>
                       </td>
                       <td><span className={`badge ${STATUS_BADGE[w.status]||"badge-muted"}`}>{w.status}</span></td>
-                      <td style={{ color: "var(--muted)", fontSize: 12 }}>{w.added_at?.slice(0,10)}</td>
                       <td>
                         <div style={{ display:"flex", gap:4 }}>
                           {isActive && (

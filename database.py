@@ -1,6 +1,6 @@
 """
 BuzzFlow - Database Layer (SQLite)
-Handles watchlist, trade logs, and stock scan results.
+Production schema with full trade lifecycle support.
 """
 
 import sqlite3
@@ -10,66 +10,108 @@ from typing import List, Dict, Optional
 import os
 
 logger = logging.getLogger(__name__)
-
 DB_PATH = os.getenv("BUZZFLOW_DB", "buzzflow.db")
 
 
 def get_connection() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
     return conn
 
 
 def init_db():
-    """Create all tables if they don't exist."""
     conn = get_connection()
     try:
         c = conn.cursor()
 
+        # ── Watchlist ──────────────────────────────────────────────────
         c.execute("""
             CREATE TABLE IF NOT EXISTS watchlist (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                symbol TEXT NOT NULL,
-                company_name TEXT,
-                entry_price REAL NOT NULL,
-                stop_loss REAL NOT NULL,
-                target REAL NOT NULL,
-                entry_score REAL,
-                confidence TEXT,
-                status TEXT DEFAULT 'WATCH',
-                added_at TEXT NOT NULL,
-                updated_at TEXT,
-                notes TEXT
+                id                INTEGER PRIMARY KEY AUTOINCREMENT,
+                symbol            TEXT NOT NULL,
+                company_name      TEXT DEFAULT '',
+                entry_price       REAL NOT NULL,
+                stop_loss         REAL NOT NULL,
+                trailing_sl       REAL,
+                target            REAL NOT NULL,
+                entry_zone_low    REAL,
+                entry_zone_high   REAL,
+                breakout_level    REAL,
+                pullback_level    REAL,
+                entry_score       REAL DEFAULT 0,
+                exit_score        REAL DEFAULT 0,
+                opportunity_score REAL DEFAULT 0,
+                trade_state       TEXT DEFAULT 'NEUTRAL',
+                confidence        TEXT DEFAULT 'medium',
+                risk_capital_pct  REAL DEFAULT 1.0,
+                qty               INTEGER DEFAULT 0,
+                status            TEXT DEFAULT 'WATCH',
+                suggested_action  TEXT DEFAULT 'MONITOR',
+                added_at          TEXT NOT NULL,
+                updated_at        TEXT,
+                notes             TEXT DEFAULT ''
             )
         """)
 
+        # ── Trade log ──────────────────────────────────────────────────
         c.execute("""
             CREATE TABLE IF NOT EXISTS trades_log (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                symbol TEXT NOT NULL,
-                action TEXT NOT NULL,
-                price REAL NOT NULL,
-                exit_score REAL,
-                exit_reason TEXT,
-                pnl_percent REAL,
-                timestamp TEXT NOT NULL,
-                notes TEXT
+                id           INTEGER PRIMARY KEY AUTOINCREMENT,
+                symbol       TEXT NOT NULL,
+                action       TEXT NOT NULL,
+                price        REAL NOT NULL,
+                qty          INTEGER DEFAULT 0,
+                exit_score   REAL,
+                exit_reason  TEXT DEFAULT '',
+                pnl_percent  REAL,
+                pnl_abs      REAL,
+                holding_days INTEGER DEFAULT 0,
+                entry_score  REAL,
+                timestamp    TEXT NOT NULL,
+                notes        TEXT DEFAULT ''
             )
         """)
 
+        # ── Scan results ───────────────────────────────────────────────
         c.execute("""
             CREATE TABLE IF NOT EXISTS scan_results (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                symbol TEXT NOT NULL,
-                entry_score REAL,
-                sentiment_score REAL,
-                technical_score REAL,
-                recommendation TEXT,
-                confidence TEXT,
-                entry_price REAL,
-                stop_loss REAL,
-                target REAL,
-                scanned_at TEXT NOT NULL
+                id                INTEGER PRIMARY KEY AUTOINCREMENT,
+                symbol            TEXT NOT NULL,
+                entry_score       REAL,
+                exit_score        REAL DEFAULT 0,
+                opportunity_score REAL DEFAULT 0,
+                sentiment_score   REAL,
+                technical_score   REAL,
+                recommendation    TEXT,
+                confidence        TEXT,
+                trade_state       TEXT DEFAULT 'NEUTRAL',
+                entry_price       REAL,
+                entry_zone_low    REAL,
+                entry_zone_high   REAL,
+                breakout_level    REAL,
+                pullback_level    REAL,
+                stop_loss         REAL,
+                target            REAL,
+                rsi               REAL,
+                volume_ratio      REAL,
+                delivery_score    REAL DEFAULT 50,
+                risk_reward       REAL,
+                scanned_at        TEXT NOT NULL
+            )
+        """)
+
+        # ── Replacement log ────────────────────────────────────────────
+        c.execute("""
+            CREATE TABLE IF NOT EXISTS replacement_log (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                weak_symbol     TEXT NOT NULL,
+                strong_symbol   TEXT NOT NULL,
+                weak_opp_score  REAL,
+                strong_opp_score REAL,
+                score_diff      REAL,
+                triggered_at    TEXT NOT NULL,
+                acted           INTEGER DEFAULT 0
             )
         """)
 
@@ -82,20 +124,26 @@ def init_db():
 # ── Watchlist ──────────────────────────────────────────────────────────────
 
 def add_to_watchlist(symbol: str, entry_price: float, stop_loss: float,
-                     target: float, entry_score: float = None,
-                     confidence: str = None, company_name: str = "",
+                     target: float, entry_score: float = 0,
+                     confidence: str = "medium", company_name: str = "",
+                     entry_zone_low: float = None, entry_zone_high: float = None,
+                     breakout_level: float = None, pullback_level: float = None,
+                     risk_capital_pct: float = 1.0, qty: int = 0,
                      notes: str = "") -> int:
     conn = get_connection()
     try:
-        c = conn.cursor()
         now = datetime.now().isoformat()
+        c = conn.cursor()
         c.execute("""
             INSERT INTO watchlist
             (symbol, company_name, entry_price, stop_loss, target,
-             entry_score, confidence, status, added_at, notes)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'WATCH', ?, ?)
-        """, (symbol.upper(), company_name, entry_price, stop_loss,
-              target, entry_score, confidence, now, notes))
+             entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+             entry_score, confidence, risk_capital_pct, qty,
+             status, trade_state, added_at, notes)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'WATCH','NEUTRAL',?,?)
+        """, (symbol.upper(), company_name, entry_price, stop_loss, target,
+              entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+              entry_score, confidence, risk_capital_pct, qty, now, notes))
         conn.commit()
         row_id = c.lastrowid
         logger.info(f"Added {symbol} to watchlist (id={row_id})")
@@ -109,26 +157,42 @@ def get_watchlist(status: str = None) -> List[Dict]:
     try:
         c = conn.cursor()
         if status:
-            c.execute("SELECT * FROM watchlist WHERE status=? ORDER BY added_at DESC", (status,))
+            c.execute("SELECT * FROM watchlist WHERE status=? ORDER BY entry_score DESC", (status,))
         else:
-            c.execute("SELECT * FROM watchlist ORDER BY added_at DESC")
+            c.execute("SELECT * FROM watchlist ORDER BY entry_score DESC")
         return [dict(row) for row in c.fetchall()]
     finally:
         conn.close()
 
 
-def update_watchlist_status(symbol: str, status: str, notes: str = ""):
-    """Update status: WATCH → BUY / CAUTION / EXIT / CLOSED"""
+def update_watchlist_scores(symbol: str, exit_score: float,
+                             opportunity_score: float, trade_state: str,
+                             suggested_action: str, trailing_sl: float = None,
+                             notes: str = ""):
     conn = get_connection()
     try:
-        c = conn.cursor()
         now = datetime.now().isoformat()
-        c.execute("""
+        conn.execute("""
+            UPDATE watchlist
+            SET exit_score=?, opportunity_score=?, trade_state=?,
+                suggested_action=?, trailing_sl=COALESCE(?,trailing_sl),
+                updated_at=?, notes=?
+            WHERE symbol=? AND status NOT IN ('CLOSED','EXIT')
+        """, (exit_score, opportunity_score, trade_state,
+              suggested_action, trailing_sl, now, notes, symbol.upper()))
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def update_watchlist_status(symbol: str, status: str, notes: str = ""):
+    conn = get_connection()
+    try:
+        conn.execute("""
             UPDATE watchlist SET status=?, updated_at=?, notes=?
             WHERE symbol=? AND status NOT IN ('CLOSED')
-        """, (status, now, notes, symbol.upper()))
+        """, (status, datetime.now().isoformat(), notes, symbol.upper()))
         conn.commit()
-        logger.info(f"Updated {symbol} watchlist status → {status}")
     finally:
         conn.close()
 
@@ -136,30 +200,33 @@ def update_watchlist_status(symbol: str, status: str, notes: str = ""):
 def remove_from_watchlist(symbol: str):
     conn = get_connection()
     try:
-        c = conn.cursor()
-        c.execute("UPDATE watchlist SET status='CLOSED', updated_at=? WHERE symbol=?",
-                  (datetime.now().isoformat(), symbol.upper()))
+        conn.execute(
+            "UPDATE watchlist SET status='CLOSED', updated_at=? WHERE symbol=? AND status!='CLOSED'",
+            (datetime.now().isoformat(), symbol.upper())
+        )
         conn.commit()
     finally:
         conn.close()
 
 
-# ── Trade Log ──────────────────────────────────────────────────────────────
+# ── Trade log ──────────────────────────────────────────────────────────────
 
 def log_trade(symbol: str, action: str, price: float,
-              exit_score: float = None, exit_reason: str = "",
-              pnl_percent: float = None, notes: str = ""):
+              qty: int = 0, exit_score: float = None,
+              exit_reason: str = "", pnl_percent: float = None,
+              pnl_abs: float = None, holding_days: int = 0,
+              entry_score: float = None, notes: str = ""):
     conn = get_connection()
     try:
-        c = conn.cursor()
-        c.execute("""
+        conn.execute("""
             INSERT INTO trades_log
-            (symbol, action, price, exit_score, exit_reason, pnl_percent, timestamp, notes)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """, (symbol.upper(), action, price, exit_score, exit_reason,
-              pnl_percent, datetime.now().isoformat(), notes))
+            (symbol, action, price, qty, exit_score, exit_reason,
+             pnl_percent, pnl_abs, holding_days, entry_score, timestamp, notes)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+        """, (symbol.upper(), action, price, qty, exit_score, exit_reason,
+              pnl_percent, pnl_abs, holding_days, entry_score,
+              datetime.now().isoformat(), notes))
         conn.commit()
-        logger.info(f"Logged trade: {action} {symbol} @ {price}")
     finally:
         conn.close()
 
@@ -177,36 +244,63 @@ def get_trade_history(symbol: str = None) -> List[Dict]:
         conn.close()
 
 
-# ── Scan Results ───────────────────────────────────────────────────────────
+# ── Scan results ───────────────────────────────────────────────────────────
 
 def save_scan_result(symbol: str, entry_score: float, sentiment_score: float,
-                     technical_score: float, recommendation: str,
-                     confidence: str, entry_price: float,
-                     stop_loss: float, target: float):
+                     technical_score: float, recommendation: str, confidence: str,
+                     entry_price: float, stop_loss: float, target: float,
+                     entry_zone_low: float = None, entry_zone_high: float = None,
+                     breakout_level: float = None, pullback_level: float = None,
+                     rsi: float = None, volume_ratio: float = None,
+                     delivery_score: float = 50, risk_reward: float = None,
+                     opportunity_score: float = 0, trade_state: str = "NEUTRAL"):
     conn = get_connection()
     try:
-        c = conn.cursor()
-        c.execute("""
+        conn.execute("""
             INSERT INTO scan_results
             (symbol, entry_score, sentiment_score, technical_score,
-             recommendation, confidence, entry_price, stop_loss, target, scanned_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             recommendation, confidence, trade_state, entry_price,
+             entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+             stop_loss, target, rsi, volume_ratio, delivery_score, risk_reward,
+             opportunity_score, scanned_at)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         """, (symbol.upper(), entry_score, sentiment_score, technical_score,
-              recommendation, confidence, entry_price, stop_loss, target,
-              datetime.now().isoformat()))
+              recommendation, confidence, trade_state, entry_price,
+              entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+              stop_loss, target, rsi, volume_ratio, delivery_score, risk_reward,
+              opportunity_score, datetime.now().isoformat()))
         conn.commit()
     finally:
         conn.close()
 
 
-def get_latest_scan_results(limit: int = 20) -> List[Dict]:
+def get_latest_scan_results(limit: int = 50) -> List[Dict]:
     conn = get_connection()
     try:
         c = conn.cursor()
         c.execute("""
             SELECT * FROM scan_results
-            ORDER BY scanned_at DESC LIMIT ?
+            ORDER BY entry_score DESC, scanned_at DESC LIMIT ?
         """, (limit,))
         return [dict(row) for row in c.fetchall()]
+    finally:
+        conn.close()
+
+
+# ── Replacement log ────────────────────────────────────────────────────────
+
+def log_replacement(weak_symbol: str, strong_symbol: str,
+                    weak_score: float, strong_score: float):
+    conn = get_connection()
+    try:
+        diff = round(strong_score - weak_score, 2)
+        conn.execute("""
+            INSERT INTO replacement_log
+            (weak_symbol, strong_symbol, weak_opp_score, strong_opp_score,
+             score_diff, triggered_at)
+            VALUES (?,?,?,?,?,?)
+        """, (weak_symbol.upper(), strong_symbol.upper(),
+              weak_score, strong_score, diff, datetime.now().isoformat()))
+        conn.commit()
     finally:
         conn.close()
