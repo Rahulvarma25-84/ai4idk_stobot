@@ -134,6 +134,33 @@ def add_to_watchlist(symbol: str, entry_price: float, stop_loss: float,
     try:
         now = datetime.now().isoformat()
         c = conn.cursor()
+        normalized_symbol = symbol.upper()
+
+        # Prevent duplicate active positions for the same symbol.
+        existing = c.execute(
+            """
+            SELECT id FROM watchlist
+            WHERE symbol=? AND status NOT IN ('CLOSED','EXIT')
+            ORDER BY id DESC LIMIT 1
+            """,
+            (normalized_symbol,),
+        ).fetchone()
+
+        if existing:
+            c.execute("""
+                UPDATE watchlist
+                SET company_name=?, entry_price=?, stop_loss=?, target=?,
+                    entry_zone_low=?, entry_zone_high=?, breakout_level=?, pullback_level=?,
+                    entry_score=?, confidence=?, risk_capital_pct=?, qty=?,
+                    status='WATCH', trade_state='NEUTRAL', updated_at=?, notes=?
+                WHERE id=?
+            """, (company_name, entry_price, stop_loss, target,
+                  entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+                  entry_score, confidence, risk_capital_pct, qty, now, notes, existing["id"]))
+            conn.commit()
+            logger.info(f"Updated existing watchlist row for {normalized_symbol} (id={existing['id']})")
+            return int(existing["id"])
+
         c.execute("""
             INSERT INTO watchlist
             (symbol, company_name, entry_price, stop_loss, target,
@@ -141,7 +168,7 @@ def add_to_watchlist(symbol: str, entry_price: float, stop_loss: float,
              entry_score, confidence, risk_capital_pct, qty,
              status, trade_state, added_at, notes)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'WATCH','NEUTRAL',?,?)
-        """, (symbol.upper(), company_name, entry_price, stop_loss, target,
+        """, (normalized_symbol, company_name, entry_price, stop_loss, target,
               entry_zone_low, entry_zone_high, breakout_level, pullback_level,
               entry_score, confidence, risk_capital_pct, qty, now, notes))
         conn.commit()
@@ -157,10 +184,38 @@ def get_watchlist(status: str = None) -> List[Dict]:
     try:
         c = conn.cursor()
         if status:
-            c.execute("SELECT * FROM watchlist WHERE status=? ORDER BY entry_score DESC", (status,))
+            c.execute(
+                """
+                SELECT * FROM watchlist
+                WHERE status=?
+                ORDER BY entry_score DESC, id DESC
+                """,
+                (status,),
+            )
         else:
-            c.execute("SELECT * FROM watchlist ORDER BY entry_score DESC")
-        return [dict(row) for row in c.fetchall()]
+            c.execute(
+                """
+                SELECT * FROM watchlist
+                ORDER BY id DESC
+                """
+            )
+
+        rows = [dict(row) for row in c.fetchall()]
+
+        # De-duplicate active symbols for dashboard/monitoring views.
+        deduped = []
+        seen_active = set()
+        for row in rows:
+            symbol = row.get("symbol")
+            is_active = row.get("status") not in ("CLOSED", "EXIT")
+            if is_active:
+                if symbol in seen_active:
+                    continue
+                seen_active.add(symbol)
+            deduped.append(row)
+
+        deduped.sort(key=lambda r: (r.get("entry_score") or 0), reverse=True)
+        return deduped
     finally:
         conn.close()
 
@@ -279,8 +334,17 @@ def get_latest_scan_results(limit: int = 50) -> List[Dict]:
     try:
         c = conn.cursor()
         c.execute("""
-            SELECT * FROM scan_results
-            ORDER BY entry_score DESC, scanned_at DESC LIMIT ?
+            SELECT * FROM (
+                SELECT sr.*,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY symbol
+                           ORDER BY scanned_at DESC, id DESC
+                       ) AS rn
+                FROM scan_results sr
+            ) latest
+            WHERE rn = 1
+            ORDER BY entry_score DESC, scanned_at DESC
+            LIMIT ?
         """, (limit,))
         return [dict(row) for row in c.fetchall()]
     finally:
