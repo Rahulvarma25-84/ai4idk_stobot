@@ -13,7 +13,15 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
+BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+STATIC_DIR   = os.path.join(BASE_DIR, "static")
+
+# Also support running from project root: python dashboard/app.py
+if not os.path.isdir(STATIC_DIR):
+    STATIC_DIR = os.path.join(os.getcwd(), "dashboard", "static")
+
+load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
 
 from database import (
     init_db, get_watchlist, get_trade_history, get_latest_scan_results,
@@ -24,13 +32,15 @@ from monitoring_engine import MonitoringEngine, _fetch_tech_data
 from replacement_engine import ReplacementEngine
 from performance_engine import compute_performance
 from scoring_engine import MarketRegime
+from universe_engine import get_universe_stats, get_universe_df
+from alert_engine import AlertEngine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 init_db()
 
-app = Flask(__name__, static_folder="static")
+app = Flask(__name__, static_folder=STATIC_DIR, static_url_path="")
 CORS(app)
 
 wl  = WatchlistEngine()
@@ -47,7 +57,7 @@ rep = ReplacementEngine(
 
 @app.route("/")
 def index():
-    return send_from_directory("static", "index.html")
+    return send_from_directory(STATIC_DIR, "index.html")
 
 
 # ── Market ─────────────────────────────────────────────────────────────────
@@ -55,6 +65,32 @@ def index():
 @app.route("/api/market")
 def market():
     return jsonify(MarketRegime.get())
+
+
+@app.route("/api/health")
+def health():
+    watchlist = get_watchlist()
+    active = [w for w in watchlist if w.get("status") not in ("CLOSED", "EXIT")]
+    return jsonify({
+        "status": "ok",
+        "server_time": datetime.now().isoformat(),
+        "telegram_configured": bool(os.getenv("TELEGRAM_TOKEN") and os.getenv("TELEGRAM_CHAT_ID")),
+        "watchlist_total": len(watchlist),
+        "watchlist_active": len(active),
+        "scan_rows_latest": len(get_latest_scan_results(limit=50)),
+    })
+
+
+@app.route("/api/telegram/test", methods=["POST"])
+def telegram_test():
+    alert = AlertEngine(
+        token=os.getenv("TELEGRAM_TOKEN"),
+        chat_id=os.getenv("TELEGRAM_CHAT_ID")
+    )
+    ok = alert.send("✅ BuzzFlow telegram pipeline test: dashboard-triggered message.")
+    if not ok:
+        return jsonify({"status": "error", "message": "Telegram send failed. Check token/chat id."}), 500
+    return jsonify({"status": "ok", "message": "Telegram test sent."})
 
 
 # ── Watchlist ──────────────────────────────────────────────────────────────
@@ -164,6 +200,75 @@ def scan_results():
     return jsonify(get_latest_scan_results(limit))
 
 
+@app.route("/api/scans/categories")
+def scan_categories():
+    """
+    Available scanner universes for manual runs from dashboard.
+    Kept in sync with scanner_v2 SECTOR_MAP keys.
+    """
+    from scanner_v2 import SECTOR_MAP
+
+    labels = {
+        "all": "All Universe",
+        "nifty_50": "Nifty 50",
+        "banking": "Banking",
+        "nifty_it": "Nifty IT",
+        "pharma": "Pharma",
+        "auto": "Auto",
+        "capex": "Capex & Infra",
+        "consumption": "Consumption",
+        "metals": "Metals",
+        "chemicals": "Chemicals",
+    }
+
+    options = [{"value": "all", "label": labels["all"]}]
+    for key in SECTOR_MAP.keys():
+        options.append({"value": key, "label": labels.get(key, key.replace("_", " ").title())})
+    return jsonify(options)
+
+
+@app.route("/api/scans/run", methods=["POST"])
+def run_manual_scan():
+    """
+    Manual scan trigger from dashboard.
+    This complements (does not replace) scheduled GitHub automation.
+    """
+    payload = request.json or {}
+    index = str(payload.get("index", "all"))
+    min_score = float(payload.get("min_score", 65))
+    max_results = int(payload.get("max_results", 20))
+    auto_watchlist = bool(payload.get("auto_watchlist", False))
+    send_alert = bool(payload.get("alert", False))
+
+    from scanner_v2 import ScannerV2, SECTOR_MAP
+
+    allowed_indices = {"all", *SECTOR_MAP.keys()}
+    if index not in allowed_indices:
+        return jsonify({"error": f"Invalid index: {index}"}), 400
+
+    scanner = ScannerV2()
+    results = scanner.scan(
+        index=index,
+        min_score=min_score,
+        max_results=max_results,
+        auto_watchlist=auto_watchlist,
+    )
+
+    if send_alert:
+        scanner.send_morning_alert(results)
+
+    return jsonify({
+        "status": "ok",
+        "index": index,
+        "min_score": min_score,
+        "max_results": max_results,
+        "auto_watchlist": auto_watchlist,
+        "alert": send_alert,
+        "signals_found": len(results),
+        "top_symbols": [r.symbol for r in results[:5]],
+    })
+
+
 # ── Performance ────────────────────────────────────────────────────────────
 
 @app.route("/api/performance")
@@ -175,6 +280,17 @@ def performance():
 def trades():
     symbol = request.args.get("symbol")
     return jsonify(get_trade_history(symbol))
+
+
+@app.route("/api/universe")
+def universe():
+    """Universe stats + optional filtered list."""
+    category = request.args.get("category")
+    cap_tier = request.args.get("cap_tier")
+    if category or cap_tier:
+        df = get_universe_df(cap_tier=cap_tier, category=category)
+        return jsonify(df.to_dict(orient="records"))
+    return jsonify(get_universe_stats())
 
 
 if __name__ == "__main__":

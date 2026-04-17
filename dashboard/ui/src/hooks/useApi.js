@@ -27,8 +27,36 @@ export function useFetch(path, deps = []) {
 }
 
 export const api = {
-  get:    (path)         => fetch(BASE + path).then(r => r.json()),
-  post:   (path, body)   => fetch(BASE + path, { method: "POST",   headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then(r => r.json()),
-  patch:  (path, body)   => fetch(BASE + path, { method: "PATCH",  headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then(r => r.json()),
-  delete: (path)         => fetch(BASE + path, { method: "DELETE" }).then(r => r.json()),
+  get:    async (path) => {
+    const res = await fetch(BASE + path);
+    const body = await res.json();
+    if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+    return body;
+  },
+  post:   async (path, body) => {
+    const res = await fetch(BASE + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const payload = await res.json();
+    if (!res.ok) throw new Error(payload?.error || `HTTP ${res.status}`);
+    return payload;
+  },
+  patch:  async (path, body) => {
+    const res = await fetch(BASE + path, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const payload = await res.json();
+    if (!res.ok) throw new Error(payload?.error || `HTTP ${res.status}`);
+    return payload;
+  },
+  delete: async (path) => {
+    const res = await fetch(BASE + path, { method: "DELETE" });
+    const body = await res.json();
+    if (!res.ok) throw new Error(body?.error || `HTTP ${res.status}`);
+    return body;
+  },
 };

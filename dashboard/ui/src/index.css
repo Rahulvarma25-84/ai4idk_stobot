@@ -270,6 +270,41 @@ select.input { cursor: pointer; }
 .section-sub { font-size: 13px; color: var(--text2); margin-top: 3px; }
 .section-actions { display: flex; gap: 8px; align-items: center; }
 
+/* ── Manual scan controls ───────────────────────────────────────────── */
+.scan-controls {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.scan-controls-row {
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.scan-controls-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.scan-check {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--text2);
+  font-size: 12px;
+  padding-bottom: 8px;
+}
+.scan-run-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text2);
+}
+
 /* ── Filter pills ───────────────────────────────────────────────────── */
 .pills { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
 .pill {
@@ -286,7 +321,56 @@ select.input { cursor: pointer; }
 .score-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; max-width: 60px; }
 .score-fill { height: 100%; border-radius: 2px; }
 
-/* ── Recharts overrides ─────────────────────────────────────────────── */
+/* ── Scan controls ──────────────────────────────────────────────────── */
+.scan-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.scan-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scan-controls-row .input {
+  width: auto;
+  min-width: 120px;
+  padding: 6px 10px;
+}
+.scan-controls-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+.scan-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  user-select: none;
+}
+.scan-check input[type="checkbox"] {
+  accent-color: var(--blue);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.scan-run-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
 .recharts-tooltip-wrapper { outline: none; }
 .recharts-default-tooltip {
   background: var(--surface2) !important;
