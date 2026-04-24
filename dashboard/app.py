@@ -25,7 +25,8 @@ load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
 
 from database import (
     init_db, get_watchlist, get_trade_history, get_latest_scan_results,
-    update_watchlist_status, remove_from_watchlist, add_to_watchlist, log_trade
+    update_watchlist_status, remove_from_watchlist, add_to_watchlist, log_trade,
+    cleanup_db
 )
 from watchlist_engine import WatchlistEngine
 from monitoring_engine import MonitoringEngine, _fetch_tech_data
@@ -81,16 +82,46 @@ def market_sentiment():
 
 @app.route("/api/health")
 def health():
+    from database import get_connection
+    conn = get_connection()
+    try:
+        scan_count    = conn.execute("SELECT COUNT(*) FROM scan_results").fetchone()[0]
+        closed_count  = conn.execute("SELECT COUNT(*) FROM watchlist WHERE status IN ('CLOSED','EXIT')").fetchone()[0]
+        rep_count     = conn.execute("SELECT COUNT(*) FROM replacement_log").fetchone()[0]
+        oldest_scan   = conn.execute("SELECT MIN(scanned_at) FROM scan_results").fetchone()[0]
+    finally:
+        conn.close()
+
+    import os
+    db_size_kb = round(os.path.getsize(os.getenv("BUZZFLOW_DB", "buzzflow.db")) / 1024, 1)
+
     watchlist = get_watchlist()
     active = [w for w in watchlist if w.get("status") not in ("CLOSED", "EXIT")]
     return jsonify({
-        "status": "ok",
-        "server_time": datetime.now().isoformat(),
-        "telegram_configured": bool(os.getenv("TELEGRAM_TOKEN") and os.getenv("TELEGRAM_CHAT_ID")),
-        "watchlist_total": len(watchlist),
-        "watchlist_active": len(active),
-        "scan_rows_latest": len(get_latest_scan_results(limit=50)),
+        "status":                "ok",
+        "server_time":           datetime.now().isoformat(),
+        "telegram_configured":   bool(os.getenv("TELEGRAM_TOKEN") and os.getenv("TELEGRAM_CHAT_ID")),
+        "watchlist_total":       len(watchlist),
+        "watchlist_active":      len(active),
+        "watchlist_closed":      closed_count,
+        "scan_rows_total":       scan_count,
+        "scan_rows_latest":      len(get_latest_scan_results(limit=50)),
+        "replacement_log_rows":  rep_count,
+        "oldest_scan":           oldest_scan,
+        "db_size_kb":            db_size_kb,
     })
+
+
+@app.route("/api/db/cleanup", methods=["POST"])
+def db_cleanup():
+    """Manual DB cleanup trigger from dashboard."""
+    payload = request.json or {}
+    deleted = cleanup_db(
+        scan_keep_days=int(payload.get("scan_keep_days", 7)),
+        closed_watchlist_keep_days=int(payload.get("closed_watchlist_keep_days", 30)),
+        replacement_keep_days=int(payload.get("replacement_keep_days", 30)),
+    )
+    return jsonify({"status": "ok", "deleted": deleted})
 
 
 @app.route("/api/telegram/test", methods=["POST"])

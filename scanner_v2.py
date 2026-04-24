@@ -48,7 +48,7 @@ from delivery_engine import get_delivery_score
 
 from universe_engine import get_universe, get_categories, get_universe_df
 
-from database import init_db, save_scan_result
+from database import init_db, save_scan_result, cleanup_db
 
 from market_regime_engine import get_market_sentiment, format_sentiment_alert
 
@@ -597,6 +597,38 @@ class ScannerV2:
 
                 return None
 
+            # ── Always save scores to DB before filter check ───────────
+            # This ensures the dashboard always shows fresh values even if
+            # the stock is filtered out for alerting (duplicate suppression,
+            # low volume, bearish market, etc.)
+            atr_pre    = tech["atr14"]
+            sl_pre     = max(tech["support"], current_price - tier_params["atr_sl_mult"] * atr_pre)
+            sl_pre     = max(sl_pre, current_price * tier_params["max_sl_pct"])
+            tgt_pre    = current_price + tier_params["atr_target_mult"] * atr_pre
+            tgt_pre    = max(tgt_pre, current_price * tier_params["min_target_pct"])
+            risk_pre   = current_price - sl_pre
+            reward_pre = tgt_pre - current_price
+            rr_pre     = round(reward_pre / max(risk_pre, 0.01), 2)
+            momentum_pre = self.scorer.compute_momentum_score(tech)
+            opp_pre      = compute_opportunity_score(entry_score, 0, momentum_pre)
+            rsi_pre      = tech["rsi"]
+            rsi_s_pre    = max(0, min(100, (rsi_pre-30)/40*100)) if rsi_pre < 70 else max(0, (100-rsi_pre)*3)
+            tech_score_pre = round(rsi_s_pre*0.4 + tech["volume_ratio"]*30 + (30 if tech["price_vs_ma20"]>1 else 0), 1)
+
+            save_scan_result(
+                symbol=symbol, entry_score=entry_score,
+                sentiment_score=sentiment, technical_score=tech_score_pre,
+                recommendation=signal, confidence="medium",
+                entry_price=current_price, stop_loss=sl_pre, target=tgt_pre,
+                entry_zone_low=round(tech["support"] * 1.005, 2),
+                entry_zone_high=round(current_price * 1.01, 2),
+                breakout_level=round(tech["resistance"] * 0.995, 2),
+                pullback_level=round(tech["ma20"] * 1.002, 2),
+                rsi=rsi_pre, volume_ratio=tech["volume_ratio"],
+                delivery_score=delivery_score,
+                risk_reward=rr_pre, opportunity_score=opp_pre, trade_state="NEUTRAL"
+            )
+
             # Apply cap-tier aware filters
 
             signal, filter_reasons = self.scorer.apply_filters(symbol, signal, tech, cap_tier=cap_tier)
@@ -679,7 +711,7 @@ class ScannerV2:
 
             tech_score = round(rsi_s*0.4 + tech["volume_ratio"]*30 + (30 if tech["price_vs_ma20"]>1 else 0), 1)
 
-            # Save to DB
+            # ── Save final refined scores to DB (overwrites the pre-filter save) ──
 
             save_scan_result(
 
@@ -864,6 +896,9 @@ class ScannerV2:
         t2 = datetime.now()
 
         logger.info(f"Total scan: {len(all_results)} signals in {(t2-t0).seconds}s")
+
+        # ── Post-scan DB cleanup ───────────────────────────────────────
+        cleanup_db()
 
         if auto_watchlist:
 

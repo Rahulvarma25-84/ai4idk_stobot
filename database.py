@@ -321,21 +321,52 @@ def save_scan_result(symbol: str, entry_score: float, sentiment_score: float,
                      rsi: float = None, volume_ratio: float = None,
                      delivery_score: float = 50, risk_reward: float = None,
                      opportunity_score: float = 0, trade_state: str = "NEUTRAL"):
+    """
+    Upsert scan result for a symbol.
+    If a row for this symbol already exists from today, UPDATE it in place.
+    Otherwise INSERT a new row.
+    This ensures the dashboard always shows fresh values after every scan,
+    even if the stock was filtered out for alerting purposes.
+    """
     conn = get_connection()
     try:
-        conn.execute("""
-            INSERT INTO scan_results
-            (symbol, entry_score, sentiment_score, technical_score,
-             recommendation, confidence, trade_state, entry_price,
-             entry_zone_low, entry_zone_high, breakout_level, pullback_level,
-             stop_loss, target, rsi, volume_ratio, delivery_score, risk_reward,
-             opportunity_score, scanned_at)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        """, (symbol.upper(), entry_score, sentiment_score, technical_score,
-              recommendation, confidence, trade_state, entry_price,
-              entry_zone_low, entry_zone_high, breakout_level, pullback_level,
-              stop_loss, target, rsi, volume_ratio, delivery_score, risk_reward,
-              opportunity_score, datetime.now().isoformat()))
+        today = datetime.now().strftime("%Y-%m-%d")
+        now   = datetime.now().isoformat()
+        sym   = symbol.upper()
+
+        existing = conn.execute(
+            "SELECT id FROM scan_results WHERE symbol=? AND scanned_at LIKE ? ORDER BY id DESC LIMIT 1",
+            (sym, f"{today}%")
+        ).fetchone()
+
+        if existing:
+            conn.execute("""
+                UPDATE scan_results SET
+                    entry_score=?, sentiment_score=?, technical_score=?,
+                    recommendation=?, confidence=?, trade_state=?, entry_price=?,
+                    entry_zone_low=?, entry_zone_high=?, breakout_level=?, pullback_level=?,
+                    stop_loss=?, target=?, rsi=?, volume_ratio=?, delivery_score=?,
+                    risk_reward=?, opportunity_score=?, scanned_at=?
+                WHERE id=?
+            """, (entry_score, sentiment_score, technical_score,
+                  recommendation, confidence, trade_state, entry_price,
+                  entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+                  stop_loss, target, rsi, volume_ratio, delivery_score,
+                  risk_reward, opportunity_score, now, existing["id"]))
+        else:
+            conn.execute("""
+                INSERT INTO scan_results
+                (symbol, entry_score, sentiment_score, technical_score,
+                 recommendation, confidence, trade_state, entry_price,
+                 entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+                 stop_loss, target, rsi, volume_ratio, delivery_score, risk_reward,
+                 opportunity_score, scanned_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            """, (sym, entry_score, sentiment_score, technical_score,
+                  recommendation, confidence, trade_state, entry_price,
+                  entry_zone_low, entry_zone_high, breakout_level, pullback_level,
+                  stop_loss, target, rsi, volume_ratio, delivery_score, risk_reward,
+                  opportunity_score, now))
         conn.commit()
     finally:
         conn.close()
@@ -363,7 +394,88 @@ def get_latest_scan_results(limit: int = 50) -> List[Dict]:
         conn.close()
 
 
-# ── Replacement log ────────────────────────────────────────────────────────
+# ── Database Maintenance ──────────────────────────────────────────────────
+
+def cleanup_db(
+    scan_keep_days: int = 7,
+    closed_watchlist_keep_days: int = 30,
+    replacement_keep_days: int = 30,
+) -> dict:
+    """
+    Routine DB cleanup. Safe to run after every scan.
+
+    - scan_results:    keep only the latest row per symbol + purge rows
+                       older than `scan_keep_days` days
+    - watchlist:       hard-delete CLOSED/EXIT rows older than
+                       `closed_watchlist_keep_days` days
+    - replacement_log: purge rows older than `replacement_keep_days` days
+    - trades_log:      never deleted (permanent performance record)
+
+    Returns dict with counts of deleted rows per table.
+    """
+    conn = get_connection()
+    deleted = {}
+    try:
+        from datetime import timedelta
+        now = datetime.now()
+
+        # ── scan_results: delete old duplicate rows ────────────────────
+        # Keep only the single latest row per symbol (highest id).
+        # Then also purge any row older than scan_keep_days even if it's
+        # the only row for that symbol (stale signal, no longer relevant).
+        cutoff_scan = (now - timedelta(days=scan_keep_days)).isoformat()
+
+        # Step 1: delete non-latest rows per symbol
+        r1 = conn.execute("""
+            DELETE FROM scan_results
+            WHERE id NOT IN (
+                SELECT MAX(id) FROM scan_results GROUP BY symbol
+            )
+        """)
+
+        # Step 2: delete latest rows that are too old
+        r2 = conn.execute(
+            "DELETE FROM scan_results WHERE scanned_at < ?",
+            (cutoff_scan,)
+        )
+
+        deleted["scan_results"] = r1.rowcount + r2.rowcount
+
+        # ── watchlist: purge old closed positions ──────────────────────
+        cutoff_wl = (now - timedelta(days=closed_watchlist_keep_days)).isoformat()
+        r3 = conn.execute("""
+            DELETE FROM watchlist
+            WHERE status IN ('CLOSED', 'EXIT')
+            AND COALESCE(updated_at, added_at) < ?
+        """, (cutoff_wl,))
+        deleted["watchlist_closed"] = r3.rowcount
+
+        # ── replacement_log: purge old entries ────────────────────────
+        cutoff_rep = (now - timedelta(days=replacement_keep_days)).isoformat()
+        r4 = conn.execute(
+            "DELETE FROM replacement_log WHERE triggered_at < ?",
+            (cutoff_rep,)
+        )
+        deleted["replacement_log"] = r4.rowcount
+
+        conn.commit()
+
+        # Reclaim disk space after deletions
+        conn.execute("VACUUM")
+
+        logger.info(
+            f"DB cleanup: scan_results -{deleted['scan_results']} | "
+            f"watchlist_closed -{deleted['watchlist_closed']} | "
+            f"replacement_log -{deleted['replacement_log']}"
+        )
+        return deleted
+    except Exception as e:
+        logger.error(f"DB cleanup failed: {e}")
+        return {}
+    finally:
+        conn.close()
+
+
 
 def log_replacement(weak_symbol: str, strong_symbol: str,
                     weak_score: float, strong_score: float):
