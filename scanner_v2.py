@@ -12,8 +12,6 @@ Outputs entry zones, breakout/pullback levels — NOT immediate BUY signals.
 
 """
 
-
-
 import os
 
 import logging
@@ -28,8 +26,6 @@ from dataclasses import dataclass, field
 
 from typing import List, Optional
 
-
-
 import numpy as np
 
 import pandas as pd
@@ -37,8 +33,6 @@ import pandas as pd
 import yfinance as yf
 
 from dotenv import load_dotenv
-
-
 
 from news_engine import NewsEngine
 
@@ -52,13 +46,13 @@ from trade_state import compute_opportunity_score
 
 from delivery_engine import get_delivery_score
 
+from universe_engine import get_universe, get_categories, get_universe_df
+
 from database import init_db, save_scan_result
 
-
+from market_regime_engine import get_market_sentiment, format_sentiment_alert
 
 load_dotenv()
-
-
 
 logging.basicConfig(
 
@@ -71,10 +65,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
-
-
-
+logging.getLogger("yfinance").setLevel(logging.CRITICAL)
 
 @dataclass
 
@@ -91,6 +82,8 @@ class ScanResult:
     signal: str
 
     confidence: str
+
+    cap_tier: str             # "large" | "mid" | "small" | "micro"
 
     # Entry zone (not immediate BUY — user decides when to enter)
 
@@ -130,13 +123,7 @@ class ScanResult:
 
     timestamp: datetime = field(default_factory=datetime.now)
 
-
-
-
-
 # ── Stock Universe ─────────────────────────────────────────────────────────
-
-
 
 NIFTY_50 = [
 
@@ -161,8 +148,6 @@ NIFTY_50 = [
     "ADANIPORTS.NS","TATAPOWER.NS","M&M.NS","BAJAJ-AUTO.NS","SHREECEM.NS",
 
 ]
-
-
 
 EXTENDED_UNIVERSE = list(dict.fromkeys(NIFTY_50 + [
 
@@ -204,7 +189,7 @@ EXTENDED_UNIVERSE = list(dict.fromkeys(NIFTY_50 + [
 
     "TORNTPOWER.NS","NHPC.NS","SJVN.NS","RVNL.NS","NBCC.NS",
 
-    "KEC.NS","THERMAX.NS","AIAENG.NS","GMRP&D.NS","IRB.NS",
+    "KEC.NS","THERMAX.NS","AIAENG.NS","GMRINFRA.NS","IRB.NS",
 
     # FMCG & Consumption
 
@@ -247,8 +232,6 @@ EXTENDED_UNIVERSE = list(dict.fromkeys(NIFTY_50 + [
 
 ]))
 
-
-
 SECTOR_MAP = {
 
     "nifty_50":    NIFTY_50,
@@ -263,17 +246,13 @@ SECTOR_MAP = {
 
     "capex":       ["LT.NS","ABB.NS","SIEMENS.NS","BHEL.NS","CUMMINSIND.NS","HAVELLS.NS","POLYCAB.NS","DIXON.NS","ADANIPORTS.NS","IRCTC.NS","INDUSTOWER.NS","JSWENERGY.NS","TATAPOWER.NS","NTPC.NS","POWERGRID.NS","ADANIGREEN.NS","RVNL.NS"],
 
-    "consumption": ["HINDUNILVR.NS","ITC.NS","NESTLEIND.NS","BRITANNIA.NS","DABUR.NS","MARICO.NS","GODREJCP.NS","COLPAL.NS","TATACONSUM.NS","TITAN.NS","DMART.NS","JUBLFOOD.NS","VBL.NS","MCDOWELL-N.NS","PAGEIND.NS"],
+    "consumption": ["HINDUNILVR.NS","ITC.NS","NESTLEIND.NS","BRITANNIA.NS","DABUR.NS","MARICO.NS","GODREJCP.NS","COLPAL.NS","TATACONSUM.NS","TITAN.NS","DMART.NS","JUBLFOOD.NS","VBL.NS","UBL.NS","PAGEIND.NS"],
 
     "metals":      ["TATASTEEL.NS","JSWSTEEL.NS","HINDALCO.NS","VEDL.NS","COALINDIA.NS","NMDC.NS","SAIL.NS","NATIONALUM.NS","HINDCOPPER.NS","APLAPOLLO.NS"],
 
-    "chemicals":   ["DEEPAKNTR.NS","NAVINFLUOR.NS","SRF.NS","AARTIIND.NS","VINATI.NS","ATUL.NS","FINEORG.NS","TATACHEM.NS","GNFC.NS","CHAMBLFERT.NS","COROMANDEL.NS","PIIND.NS","FLUOROCHEM.NS"],
+    "chemicals":   ["DEEPAKNTR.NS","NAVINFLUOR.NS","SRF.NS","AARTIIND.NS","VINATIORGA.NS","ATUL.NS","FINEORG.NS","TATACHEM.NS","GNFC.NS","CHAMBLFERT.NS","COROMANDEL.NS","PIIND.NS","FLUOROCHEM.NS"],
 
 }
-
-
-
-
 
 class ScannerV2:
 
@@ -289,8 +268,6 @@ class ScannerV2:
 
     """
 
-
-
     def __init__(self):
 
         init_db()
@@ -304,8 +281,6 @@ class ScannerV2:
         self.alert = AlertEngine()
 
         self._nifty_return_5d = self._get_nifty_return()
-
-
 
     def _get_nifty_return(self) -> float:
 
@@ -323,8 +298,6 @@ class ScannerV2:
 
         return 0.0
 
-
-
     def _get_price_data(self, symbol: str) -> Optional[pd.DataFrame]:
 
         try:
@@ -336,8 +309,6 @@ class ScannerV2:
         except Exception:
 
             return None
-
-
 
     def _compute_tech(self, hist: pd.DataFrame) -> dict:
 
@@ -353,11 +324,7 @@ class ScannerV2:
 
         low    = hist["Low"].astype(float)
 
-
-
         def safe_last(s): return float(s.dropna().iloc[-1]) if not s.dropna().empty else 0.0
-
-
 
         # RSI
 
@@ -371,8 +338,6 @@ class ScannerV2:
 
         rsi   = safe_last(100 - 100 / (1 + rs))
 
-
-
         # MACD
 
         ema12 = close.ewm(span=12, min_periods=5).mean()
@@ -383,15 +348,11 @@ class ScannerV2:
 
         macd_hist = safe_last(macd_line - macd_line.ewm(span=9, min_periods=3).mean())
 
-
-
         # Volume ratio
 
         vol_avg   = safe_last(volume.rolling(20, min_periods=5).mean()) or float(volume.mean())
 
         vol_ratio = float(volume.iloc[-1]) / max(vol_avg, 1)
-
-
 
         # ATR ratio
 
@@ -405,8 +366,6 @@ class ScannerV2:
 
         atr14 = safe_last(tr.rolling(14, min_periods=5).mean()) or float(close.iloc[-1]) * 0.02
 
-
-
         # Support / resistance (20-day)
 
         support    = safe_last(low.rolling(20, min_periods=5).min()) or float(low.min())
@@ -419,21 +378,15 @@ class ScannerV2:
 
         price_vs_res = (current - support) / max(price_range, 0.001)
 
-
-
         # MAs
 
         ma20 = safe_last(close.rolling(20, min_periods=5).mean()) or current
 
         ma50 = safe_last(close.rolling(50, min_periods=20).mean()) or current
 
-
-
         # 5-day return
 
         ret5 = float((close.iloc[-1] - close.iloc[-5]) / close.iloc[-5] * 100) if len(close) >= 5 else 0.0
-
-
 
         # Gap
 
@@ -445,13 +398,9 @@ class ScannerV2:
 
             except: pass
 
-
-
         # Recent low (for trailing stop)
 
         recent_low = safe_last(low.rolling(5, min_periods=2).min()) or float(low.iloc[-1])
-
-
 
         return {
 
@@ -471,9 +420,7 @@ class ScannerV2:
 
         }
 
-
-
-    def _quick_filter(self, symbol: str) -> Optional[dict]:
+    def _quick_filter(self, symbol: str, cap_tier: str = "large") -> Optional[dict]:
 
         """Phase 1: Fast pre-filter. No news. ~0.3s/stock."""
 
@@ -493,8 +440,6 @@ class ScannerV2:
 
             current = float(close.iloc[-1])
 
-
-
             # RSI
 
             delta = close.diff()
@@ -509,15 +454,11 @@ class ScannerV2:
 
             rsi   = float(rsi_s.dropna().iloc[-1]) if not rsi_s.dropna().empty else 50.0
 
-
-
             # MA50
 
             ma50_s = close.rolling(50, min_periods=20).mean()
 
             ma50   = float(ma50_s.dropna().iloc[-1]) if not ma50_s.dropna().empty else current
-
-
 
             # Volume ratio
 
@@ -525,17 +466,16 @@ class ScannerV2:
 
             vol_ratio = float(volume.iloc[-1]) / max(vol_avg, 1)
 
-
-
-            # Hard filters
+            # Cap-tier aware hard filters
+            tier = (cap_tier or "large").lower()
+            rsi_max   = 70 if tier in ("small", "micro") else 73 if tier == "mid" else 75
+            vol_floor = 1.5 if tier in ("small", "micro") else 1.3 if tier == "mid" else 1.2
 
             if current < ma50 * 0.97: return None   # below MA50
 
-            if rsi > 75 or rsi < 30:  return None   # overbought or dead
+            if rsi > rsi_max or rsi < 30: return None
 
-            if vol_ratio < 0.6:       return None   # no interest
-
-
+            if vol_ratio < vol_floor * 0.5: return None  # pre-filter uses half threshold
 
             # Quick score
 
@@ -545,11 +485,11 @@ class ScannerV2:
 
             trend_score = 80 if current > float(close.rolling(20, min_periods=5).mean().dropna().iloc[-1] if not close.rolling(20, min_periods=5).mean().dropna().empty else current) else 30
 
-
-
             return {
 
                 "symbol":      symbol,
+
+                "cap_tier":    cap_tier,
 
                 "quick_score": round(rsi_score * 0.4 + vol_score * 0.3 + trend_score * 0.3, 1),
 
@@ -565,21 +505,21 @@ class ScannerV2:
 
             return None
 
+    def _risk_tier(self, score: float, cap_tier: str = "large") -> tuple:
 
+        """Returns (risk_capital_pct, confidence) based on entry score and cap tier."""
 
-    def _risk_tier(self, score: float) -> tuple:
+        params = self.scorer.cap_tier_params(cap_tier)
 
-        """Returns (risk_capital_pct, confidence) based on entry score."""
+        max_risk = params["risk_cap_pct"]
 
-        if score >= 70:   return 1.5, "high"
+        if score >= 70:   return min(max_risk, 1.5), "high"
 
-        elif score >= 65: return 1.0, "high"
+        elif score >= 65: return min(max_risk, 1.0), "high"
 
-        elif score >= 60: return 0.5, "medium"
+        elif score >= 60: return min(max_risk, 0.5), "medium"
 
         else:             return 0.0, "low"
-
-
 
     def _position_size(self, entry: float, sl: float,
 
@@ -597,9 +537,9 @@ class ScannerV2:
 
         return max(0, int(risk_amount / risk_per_share))
 
+    def _analyze_stock(self, symbol: str, capital: float = 100000,
 
-
-    def _analyze_stock(self, symbol: str, capital: float = 100000) -> Optional[ScanResult]:
+                       cap_tier: str = "large") -> Optional[ScanResult]:
 
         try:
 
@@ -619,8 +559,6 @@ class ScannerV2:
 
             tech = self._compute_tech(hist)
 
-
-
             # News sentiment
 
             company = symbol.replace(".NS","").replace(".BO","")
@@ -629,71 +567,67 @@ class ScannerV2:
 
             sentiment = buzz["raw_sentiment"]
 
-
-
             # Delivery volume proxy (CMF + Money Flow Ratio from OHLCV)
-
-            # Pass hist directly — no extra API call needed
 
             delivery_score = get_delivery_score(symbol, hist)
 
+            # Cap-tier params
+            tier_params = self.scorer.cap_tier_params(cap_tier)
 
+            # Reject if delivery too low for this tier (manipulation guard for small caps)
+            if delivery_score < tier_params["delivery_min"] and cap_tier in ("small", "micro"):
+                logger.info(f"SKIP {symbol} ({cap_tier}): delivery {delivery_score:.0f} < {tier_params['delivery_min']}")
+                return None
 
-            # Entry score — delivery replaces the volume-ratio accumulation proxy
-
+            # Entry score — adjust sentiment weight for small/micro caps
             components = self.scorer.technical_to_entry_components(
-
                 tech, sentiment, self._nifty_return_5d)
 
             # Override accumulation with real delivery score (stronger signal)
-
             components["accumulation"] = delivery_score
 
+            # Boost sentiment weight for small/micro (more news-driven)
+            if cap_tier in ("small", "micro") and tier_params["sentiment_weight"] > 0.10:
+                extra = tier_params["sentiment_weight"] - 0.10
+                components["sentiment"] = min(100, sentiment * (1 + extra))
+
             entry_score, signal = self.scorer.compute_entry_score(**components)
-
-
 
             if signal == "SKIP":
 
                 return None
 
+            # Apply cap-tier aware filters
 
-
-            # Apply filters
-
-            signal, filter_reasons = self.scorer.apply_filters(symbol, signal, tech)
+            signal, filter_reasons = self.scorer.apply_filters(symbol, signal, tech, cap_tier=cap_tier)
 
             if signal == "FILTERED":
 
-                logger.info(f"FILTERED {symbol}: {', '.join(filter_reasons)}")
+                logger.info(f"FILTERED {symbol} ({cap_tier}): {', '.join(filter_reasons)}")
 
                 return None
 
-
-
-            # ── ATR-based SL and target ────────────────────────────────
-
+            # ── ATR-based SL and target (cap-tier adjusted) ────────────
             atr = tech["atr14"]
 
             support    = tech["support"]
 
             resistance = tech["resistance"]
 
+            sl_mult     = tier_params["atr_sl_mult"]
+            tgt_mult    = tier_params["atr_target_mult"]
+            max_sl_pct  = tier_params["max_sl_pct"]
+            min_tgt_pct = tier_params["min_target_pct"]
 
+            stop_loss = max(support, current_price - sl_mult * atr)
 
-            stop_loss = max(support, current_price - 1.5 * atr)
+            stop_loss = max(stop_loss, current_price * max_sl_pct)
 
-            stop_loss = max(stop_loss, current_price * 0.92)
-
-
-
-            atr_target = current_price + 2.5 * atr
+            atr_target = current_price + tgt_mult * atr
 
             target = min(resistance * 0.98, atr_target) if resistance > current_price * 1.03 else atr_target
 
-            target = max(target, current_price * 1.05)
-
-
+            target = max(target, current_price * min_tgt_pct)
 
             risk   = current_price - stop_loss
 
@@ -701,13 +635,9 @@ class ScannerV2:
 
             rr     = round(reward / max(risk, 0.01), 2)
 
-
-
-            if rr < 1.2:
+            if rr < tier_params["min_rr"]:
 
                 return None
-
-
 
             # ── Entry zone (not immediate BUY) ─────────────────────────
 
@@ -719,35 +649,27 @@ class ScannerV2:
 
             pullback_level  = round(tech["ma20"] * 1.002, 2)
 
-
-
             entry_conditions = (
 
-                f"Enter between ₹{entry_zone_low}–₹{entry_zone_high} on volume confirmation. "
+                f"Enter between Rs{entry_zone_low}–Rs{entry_zone_high} on volume confirmation. "
 
-                f"Breakout above ₹{breakout_level} is aggressive entry. "
+                f"Breakout above Rs{breakout_level} is aggressive entry. "
 
-                f"Pullback to ₹{pullback_level} (MA20) is conservative entry."
+                f"Pullback to Rs{pullback_level} (MA20) is conservative entry."
 
             )
 
-
-
             # ── Risk tier ──────────────────────────────────────────────
 
-            risk_pct, confidence = self._risk_tier(entry_score)
+            risk_pct, confidence = self._risk_tier(entry_score, cap_tier)
 
             qty = self._position_size(current_price, stop_loss, risk_pct, capital)
-
-
 
             # ── Opportunity score ──────────────────────────────────────
 
             momentum = self.scorer.compute_momentum_score(tech)
 
             opp_score = compute_opportunity_score(entry_score, 0, momentum)
-
-
 
             # ── Technical score ────────────────────────────────────────
 
@@ -756,8 +678,6 @@ class ScannerV2:
             rsi_s = max(0, min(100, (rsi-30)/40*100)) if rsi < 70 else max(0, (100-rsi)*3)
 
             tech_score = round(rsi_s*0.4 + tech["volume_ratio"]*30 + (30 if tech["price_vs_ma20"]>1 else 0), 1)
-
-
 
             # Save to DB
 
@@ -783,8 +703,6 @@ class ScannerV2:
 
             )
 
-
-
             return ScanResult(
 
                 symbol=symbol, company_name=company,
@@ -792,6 +710,8 @@ class ScannerV2:
                 current_price=current_price, entry_score=entry_score,
 
                 signal=signal, confidence=confidence,
+
+                cap_tier=cap_tier,
 
                 entry_zone_low=entry_zone_low, entry_zone_high=entry_zone_high,
 
@@ -823,8 +743,6 @@ class ScannerV2:
 
             return None
 
-
-
     def scan(self, index: str = "all", min_score: float = 65,
 
              max_results: int = 10, capital: float = 100000,
@@ -833,85 +751,123 @@ class ScannerV2:
 
         """
 
-        Two-phase scan.
+        Two-phase scan with cap-tier grouping.
 
-        Phase 1: 20 workers, pure technical, ~3s for 800 stocks.
+        Phase 1: 20 workers, pure technical pre-filter.
 
-        Phase 2: 5 workers, full analysis + news, top 50 candidates.
+        Phase 2: 5 workers, full analysis + news, top 50 candidates per tier.
+
+        Returns results sorted by cap tier: large → mid → small.
 
         """
 
-        stocks = list(dict.fromkeys(
+        # ── Market sentiment check ─────────────────────────────────────
+        sentiment = get_market_sentiment()
+        if sentiment["bearish_warning"]:
+            logger.warning(
+                f"BEARISH WARNING: composite={sentiment['composite_score']} "
+                f"regime={sentiment['regime']} — small/micro caps blocked"
+            )
 
-            EXTENDED_UNIVERSE if index == "all" else SECTOR_MAP.get(index, NIFTY_50)
+        # ── Build per-tier stock lists ─────────────────────────────────
+        if index == "all":
+            # Run all tiers
+            tier_stocks = {
+                "large": get_universe(cap_tier="large"),
+                "mid":   get_universe(cap_tier="mid"),
+                "small": get_universe(cap_tier="small"),
+            }
+        elif index in ("large", "mid", "small", "micro"):
+            tier_stocks = {index: get_universe(cap_tier=index)}
+        elif index in get_categories():
+            # Sector scan — tag each stock with its cap tier from universe
+            df = get_universe_df(category=index)
+            tier_stocks = {}
+            for tier in df["cap_tier"].unique():
+                tickers = df[df["cap_tier"] == tier]["ticker"].tolist()
+                if tickers:
+                    tier_stocks[tier] = tickers
+        elif index in ("nifty50","nifty100","nifty200","nifty500","midcap150","smallcap250"):
+            df = get_universe_df(index_name=index)
+            tier_stocks = {}
+            for tier in df["cap_tier"].unique():
+                tickers = df[df["cap_tier"] == tier]["ticker"].tolist()
+                if tickers:
+                    tier_stocks[tier] = tickers
+        else:
+            # Fallback curated list — treat as large
+            tier_stocks = {"large": SECTOR_MAP.get(index, NIFTY_50)}
 
-        ))
+        # Deduplicate within each tier
+        for t in tier_stocks:
+            tier_stocks[t] = list(dict.fromkeys(tier_stocks[t]))
 
-        total = len(stocks)
+        # ── Skip small caps entirely in bearish market ─────────────────
+        if sentiment["bearish_warning"]:
+            for blocked in ("small", "micro"):
+                if blocked in tier_stocks:
+                    logger.warning(f"Dropping {blocked} cap scan — bearish market")
+                    del tier_stocks[blocked]
 
         t0 = datetime.now()
+        all_results: List[ScanResult] = []
 
-        logger.info(f"Phase 1: pre-filter {total} stocks...")
+        for tier, stocks in tier_stocks.items():
+            total = len(stocks)
+            logger.info(f"Phase 1 [{tier}]: pre-filter {total} stocks...")
 
+            quick = []
 
+            with concurrent.futures.ThreadPoolExecutor(max_workers=20) as ex:
 
-        quick = []
+                futs = {ex.submit(self._quick_filter, s, tier): s for s in stocks}
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=20) as ex:
+                for f in concurrent.futures.as_completed(futs):
 
-            futs = {ex.submit(self._quick_filter, s): s for s in stocks}
+                    r = f.result()
 
-            for f in concurrent.futures.as_completed(futs):
+                    if r:
 
-                r = f.result()
+                        quick.append(r)
 
-                if r:
+            quick.sort(key=lambda x: x["quick_score"], reverse=True)
 
-                    quick.append(r)
+            candidates = [r["symbol"] for r in quick[:50]]
 
+            t1 = datetime.now()
 
+            logger.info(f"Phase 1 [{tier}]: {len(quick)}/{total} passed in {(t1-t0).seconds}s -> {len(candidates)} to Phase 2")
 
-        quick.sort(key=lambda x: x["quick_score"], reverse=True)
+            tier_results = []
 
-        candidates = [r["symbol"] for r in quick[:50]]
+            with concurrent.futures.ThreadPoolExecutor(max_workers=5) as ex:
 
-        t1 = datetime.now()
+                futs = {ex.submit(self._analyze_stock, s, capital, tier): s for s in candidates}
 
-        logger.info(f"Phase 1: {len(quick)}/{total} passed in {(t1-t0).seconds}s -> {len(candidates)} to Phase 2")
+                for f in concurrent.futures.as_completed(futs):
 
+                    r = f.result()
 
+                    if r and r.entry_score >= min_score:
 
-        results = []
+                        tier_results.append(r)
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as ex:
+            tier_results.sort(key=lambda x: x.entry_score, reverse=True)
 
-            futs = {ex.submit(self._analyze_stock, s, capital): s for s in candidates}
+            # Per-tier result cap: large=10, mid=8, small=5
+            tier_cap = {"large": 10, "mid": 8, "small": 5, "micro": 3}.get(tier, max_results)
 
-            for f in concurrent.futures.as_completed(futs):
+            all_results.extend(tier_results[:min(tier_cap, max_results)])
 
-                r = f.result()
-
-                if r and r.entry_score >= min_score:
-
-                    results.append(r)
-
-
+            logger.info(f"Phase 2 [{tier}]: {len(tier_results)} signals, keeping {min(tier_cap, max_results)}")
 
         t2 = datetime.now()
 
-        logger.info(f"Phase 2: {len(results)} signals in {(t2-t1).seconds}s | Total: {(t2-t0).seconds}s")
-
-
-
-        results.sort(key=lambda x: x.entry_score, reverse=True)
-
-        top = results[:max_results]
-
-
+        logger.info(f"Total scan: {len(all_results)} signals in {(t2-t0).seconds}s")
 
         if auto_watchlist:
 
-            for r in top:
+            for r in all_results:
 
                 if r.signal in ("STRONG_BUY", "BUY") and r.risk_capital_pct > 0:
 
@@ -937,59 +893,85 @@ class ScannerV2:
 
                         qty=r.qty_per_lakh,
 
-                        notes=f"R:R={r.risk_reward}"
+                        notes=f"R:R={r.risk_reward} tier={r.cap_tier}"
 
                     )
 
                     self.scorer.mark_alerted(r.symbol)
 
-
-
-        return top
-
-
+        return all_results
 
     def print_report(self, results: List[ScanResult], index: str = ""):
 
+        sentiment = get_market_sentiment()
+
+        regime_str = sentiment["regime"]
+
+        score_str  = f"{sentiment['composite_score']:.0f}/100"
+
+        print(f"\n{'='*95}")
+
+        print(f"  BUZZFLOW SCAN -- {index.upper() or 'ALL'} | {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+
+        print(f"  Market Sentiment: {regime_str} ({score_str}) | Nifty Rs{sentiment['nifty_price']:,.0f}")
+
+        if sentiment["bearish_warning"]:
+
+            print(f"  *** BEARISH WARNING — reduce position sizes, tighten stops ***")
+
+        print(f"{'='*95}")
+
         if not results:
 
-            print("\n  No setups found above score threshold.\n")
+            print(f"\n  No setups found above score threshold.\n")
 
             return
 
-        regime = MarketRegime.get()
+        # Group by cap tier
+        tier_order  = ["large", "mid", "small", "micro"]
+        tier_labels = {"large": "LARGE CAP", "mid": "MID CAP", "small": "SMALL CAP", "micro": "MICRO CAP"}
 
-        regime_str = "BULLISH" if regime["bullish"] else "BEARISH"
-
-        print(f"\n{'='*90}")
-
-        print(f"  BUZZFLOW SCAN — {index.upper()} | {datetime.now().strftime('%Y-%m-%d %H:%M')} | Market: {regime_str}")
-
-        print(f"{'='*90}")
-
-        print(f"  {'Symbol':<14} {'Score':>6} {'Signal':<12} {'Entry Zone':>20} {'SL':>8} {'Target':>8} {'R:R':>5} {'Risk%':>6} {'Deliv%':>7}")
-
-        print(f"  {'-'*90}")
-
+        grouped = {}
         for r in results:
+            grouped.setdefault(r.cap_tier, []).append(r)
 
-            zone = f"₹{r.entry_zone_low:.0f}–{r.entry_zone_high:.0f}"
+        header = f"  {'Symbol':<14} {'Score':>6} {'Signal':<12} {'Entry Zone':>20} {'SL':>8} {'Target':>8} {'R:R':>5} {'Risk%':>6} {'Deliv':>6}"
 
-            print(f"  {r.symbol:<14} {r.entry_score:>6.1f} {r.signal:<12} {zone:>20} "
+        for tier in tier_order:
 
-                  f"{r.stop_loss:>8.2f} {r.target_price:>8.2f} {r.risk_reward:>5.1f} "
+            if tier not in grouped:
 
-                  f"{r.risk_capital_pct:>5.1f}% {r.delivery_score:>6.0f}")
+                continue
 
-        print(f"{'='*90}")
+            tier_results = grouped[tier]
 
-        print(f"\n  Entry Conditions:")
+            print(f"\n  ── {tier_labels.get(tier, tier.upper())} ({len(tier_results)} setups) {'─'*55}")
+
+            print(header)
+
+            print(f"  {'-'*93}")
+
+            for r in tier_results:
+
+                zone = f"Rs{r.entry_zone_low:.0f}-{r.entry_zone_high:.0f}"
+
+                print(f"  {r.symbol:<14} {r.entry_score:>6.1f} {r.signal:<12} {zone:>20} "
+
+                      f"{r.stop_loss:>8.2f} {r.target_price:>8.2f} {r.risk_reward:>5.1f} "
+
+                      f"{r.risk_capital_pct:>5.1f}% {r.delivery_score:>5.0f}")
+
+        print(f"\n{'='*95}")
+
+        print(f"\n  Entry Conditions (top 3):")
 
         for r in results[:3]:
 
-            print(f"\n  {r.symbol}:")
+            print(f"\n  {r.symbol} [{r.cap_tier.upper()}]:")
 
-            print(f"    {r.entry_conditions}")
+            safe_cond = r.entry_conditions.encode("ascii", "replace").decode("ascii")
+
+            print(f"    {safe_cond}")
 
             if r.news_headlines:
 
@@ -997,55 +979,87 @@ class ScannerV2:
 
         print()
 
-
-
     def send_morning_alert(self, results: List[ScanResult]):
 
-        if not results:
+        sentiment = get_market_sentiment()
 
-            return
+        regime = sentiment["regime"]
 
-        regime = MarketRegime.get()
+        score  = sentiment["composite_score"]
+
+        icons  = {"STRONGLY_BULLISH":"🟢","BULLISH":"📈","NEUTRAL":"⚪","CAUTION":"🟡","BEARISH":"🔴"}
+
+        r_icon = icons.get(regime, "⚪")
 
         lines = [
 
             f"📊 <b>BuzzFlow Morning Scan</b>",
 
-            f"Market: {'📈 BULLISH' if regime['bullish'] else '📉 BEARISH'} | Nifty ₹{regime['nifty_price']:,.0f}",
-
-            ""
+            f"{r_icon} Market: {regime} ({score:.0f}/100) | Nifty Rs{sentiment['nifty_price']:,.0f}",
 
         ]
 
-        for r in results[:5]:
+        if sentiment["bearish_warning"]:
 
-            icon = "🟢" if r.signal == "STRONG_BUY" else "🔵"
+            lines.append("⚠️ <b>BEARISH WARNING</b> — tighten stops, reduce size")
 
-            lines.append(
+        lines.append("")
 
-                f"{icon} <b>{r.symbol}</b> | Score: {r.entry_score:.0f} | {r.signal}\n"
+        if not results:
 
-                f"   Zone: ₹{r.entry_zone_low:.0f}–{r.entry_zone_high:.0f} | "
+            lines.append("No setups cleared the configured score/risk filters in this run.")
 
-                f"SL: ₹{r.stop_loss:.2f} | Target: ₹{r.target_price:.2f} | R:R: {r.risk_reward}\n"
+            self.alert.send("\n".join(lines))
 
-                f"   Risk: {r.risk_capital_pct}% capital | Delivery: {r.delivery_score:.0f}/100"
+            return
 
-            )
+        # Group by tier
+        tier_order  = ["large", "mid", "small", "micro"]
+        tier_labels = {"large": "Large Cap", "mid": "Mid Cap", "small": "Small Cap", "micro": "Micro Cap"}
+        grouped = {}
+        for r in results:
+            grouped.setdefault(r.cap_tier, []).append(r)
+
+        for tier in tier_order:
+
+            if tier not in grouped:
+
+                continue
+
+            lines.append(f"<b>── {tier_labels[tier]} ──</b>")
+
+            for r in grouped[tier][:4]:
+
+                icon = "🟢" if r.signal == "STRONG_BUY" else "🔵"
+
+                lines.append(
+
+                    f"{icon} <b>{r.symbol}</b> | Score: {r.entry_score:.0f} | {r.signal}\n"
+
+                    f"   Zone: Rs{r.entry_zone_low:.0f}-{r.entry_zone_high:.0f} | "
+
+                    f"SL: Rs{r.stop_loss:.2f} | Target: Rs{r.target_price:.2f} | R:R: {r.risk_reward}\n"
+
+                    f"   Risk: {r.risk_capital_pct}% capital | Delivery: {r.delivery_score:.0f}/100"
+
+                )
+
+            lines.append("")
 
         self.alert.send("\n".join(lines))
-
-
-
-
 
 def main():
 
     parser = argparse.ArgumentParser(description="BuzzFlow Scanner")
 
-    parser.add_argument("--index", choices=list(SECTOR_MAP.keys()) + ["all"], default="all")
+    parser.add_argument("--index",
+                        default="all",
+                        help="all | large | mid | nifty50 | nifty500 | banking | pharma | nifty_it | auto | capex | consumption | metals | chemicals | realty | telecom | services")
 
     parser.add_argument("--min-score", type=float, default=65)
+
+    parser.add_argument("--refresh-universe", action="store_true",
+                        help="Force re-fetch NSE universe (ignores 24h cache)")
 
     parser.add_argument("--max-results", type=int, default=10)
 
@@ -1057,7 +1071,10 @@ def main():
 
     args = parser.parse_args()
 
-
+    # Force refresh universe if requested
+    if args.refresh_universe:
+        from universe_engine import refresh_universe
+        refresh_universe(force=True)
 
     scanner = ScannerV2()
 
@@ -1076,10 +1093,6 @@ def main():
     if args.alert:
 
         scanner.send_morning_alert(results)
-
-
-
-
 
 if __name__ == "__main__":
 

@@ -1,0 +1,500 @@
+ticker,symbol,company,industry,category,cap_tier,index_name,isin,updated_at
+360ONE.NS,360ONE,360 ONE WAM Ltd.,Financial Services,banking,mid,nifty200,INE466L01038,2026-04-17
+3MINDIA.NS,3MINDIA,3M India Ltd.,Diversified,others,mid,nifty500,INE470A01017,2026-04-17
+AADHARHFC.NS,AADHARHFC,Aadhar Housing Finance Ltd.,Financial Services,banking,mid,nifty500,INE883F01010,2026-04-17
+AARTIIND.NS,AARTIIND,Aarti Industries Ltd.,Chemicals,chemicals,mid,nifty500,INE769A01020,2026-04-17
+AAVAS.NS,AAVAS,Aavas Financiers Ltd.,Financial Services,banking,mid,nifty500,INE216P01012,2026-04-17
+ABB.NS,ABB,ABB India Ltd.,Capital Goods,capex,large,nifty100,INE117A01022,2026-04-17
+ABBOTINDIA.NS,ABBOTINDIA,Abbott India Ltd.,Healthcare,pharma,mid,nifty500,INE358A01014,2026-04-17
+ABCAPITAL.NS,ABCAPITAL,Aditya Birla Capital Ltd.,Financial Services,banking,mid,nifty200,INE674K01013,2026-04-17
+ABDL.NS,ABDL,Allied Blenders and Distillers Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE552Z01027,2026-04-17
+ABFRL.NS,ABFRL,Aditya Birla Fashion and Retail Ltd.,Consumer Services,others,mid,nifty500,INE647O01011,2026-04-17
+ABLBL.NS,ABLBL,Aditya Birla Lifestyle Brands Ltd.,Consumer Services,others,mid,nifty500,INE14LE01019,2026-04-17
+ABREL.NS,ABREL,Aditya Birla Real Estate Ltd.,Realty,realty,mid,nifty500,INE055A01016,2026-04-17
+ABSLAMC.NS,ABSLAMC,Aditya Birla Sun Life AMC Ltd.,Financial Services,banking,mid,nifty500,INE404A01024,2026-04-17
+ACC.NS,ACC,ACC Ltd.,Construction Materials,others,mid,nifty500,INE012A01025,2026-04-17
+ACE.NS,ACE,Action Construction Equipment Ltd.,Capital Goods,capex,mid,nifty500,INE731H01025,2026-04-17
+ACMESOLAR.NS,ACMESOLAR,ACME Solar Holdings Ltd.,Power,capex,mid,nifty500,INE622W01025,2026-04-17
+ACUTAAS.NS,ACUTAAS,Acutaas Chemicals Ltd.,Healthcare,pharma,mid,nifty500,INE00FF01025,2026-04-17
+ADANIENSOL.NS,ADANIENSOL,Adani Energy Solutions Ltd.,Power,capex,large,nifty100,INE931S01010,2026-04-17
+ADANIENT.NS,ADANIENT,Adani Enterprises Ltd.,Metals & Mining,metals,large,nifty50,INE423A01024,2026-04-17
+ADANIGREEN.NS,ADANIGREEN,Adani Green Energy Ltd.,Power,capex,large,nifty100,INE364U01010,2026-04-17
+ADANIPORTS.NS,ADANIPORTS,Adani Ports and Special Economic Zone Ltd.,Services,services,large,nifty50,INE742F01042,2026-04-17
+ADANIPOWER.NS,ADANIPOWER,Adani Power Ltd.,Power,capex,large,nifty100,INE814H01029,2026-04-17
+AEGISLOG.NS,AEGISLOG,Aegis Logistics Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE208C01025,2026-04-17
+AEGISVOPAK.NS,AEGISVOPAK,Aegis Vopak Terminals Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE0INX01018,2026-04-17
+AFCONS.NS,AFCONS,Afcons Infrastructure Ltd.,Construction,capex,mid,nifty500,INE101I01011,2026-04-17
+AFFLE.NS,AFFLE,Affle 3i Ltd.,Information Technology,nifty_it,mid,nifty500,INE00WC01027,2026-04-17
+AIAENG.NS,AIAENG,AIA Engineering Ltd.,Capital Goods,capex,mid,nifty500,INE212H01026,2026-04-17
+AIIL.NS,AIIL,Authum Investment & Infrastructure Ltd.,Financial Services,banking,mid,nifty500,INE206F01022,2026-04-17
+AJANTPHARM.NS,AJANTPHARM,Ajanta Pharmaceuticals Ltd.,Healthcare,pharma,mid,nifty500,INE031B01049,2026-04-17
+ALKEM.NS,ALKEM,Alkem Laboratories Ltd.,Healthcare,pharma,mid,nifty200,INE540L01014,2026-04-17
+AMBER.NS,AMBER,Amber Enterprises India Ltd.,Consumer Durables,consumption,mid,nifty500,INE371P01015,2026-04-17
+AMBUJACEM.NS,AMBUJACEM,Ambuja Cements Ltd.,Construction Materials,others,large,nifty100,INE079A01024,2026-04-17
+ANANDRATHI.NS,ANANDRATHI,Anand Rathi Wealth Ltd.,Financial Services,banking,mid,nifty500,INE463V01026,2026-04-17
+ANANTRAJ.NS,ANANTRAJ,Anant Raj Ltd.,Realty,realty,mid,nifty500,INE242C01024,2026-04-17
+ANGELONE.NS,ANGELONE,Angel One Ltd.,Financial Services,banking,mid,nifty500,INE732I01021,2026-04-17
+ANTHEM.NS,ANTHEM,Anthem Biosciences Ltd.,Healthcare,pharma,mid,nifty500,INE0CZ201020,2026-04-17
+ANURAS.NS,ANURAS,Anupam Rasayan India Ltd.,Chemicals,chemicals,mid,nifty500,INE930P01018,2026-04-17
+APARINDS.NS,APARINDS,Apar Industries Ltd.,Capital Goods,capex,mid,nifty500,INE372A01015,2026-04-17
+APLAPOLLO.NS,APLAPOLLO,APL Apollo Tubes Ltd.,Capital Goods,capex,mid,nifty200,INE702C01027,2026-04-17
+APOLLOHOSP.NS,APOLLOHOSP,Apollo Hospitals Enterprise Ltd.,Healthcare,pharma,large,nifty50,INE437A01024,2026-04-17
+APOLLOTYRE.NS,APOLLOTYRE,Apollo Tyres Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE438A01022,2026-04-17
+APTUS.NS,APTUS,Aptus Value Housing Finance India Ltd.,Financial Services,banking,mid,nifty500,INE852O01025,2026-04-17
+ARE&M.NS,ARE&M,Amara Raja Energy & Mobility Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE885A01032,2026-04-17
+ASAHIINDIA.NS,ASAHIINDIA,Asahi India Glass Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE439A01020,2026-04-17
+ASHOKLEY.NS,ASHOKLEY,Ashok Leyland Ltd.,Capital Goods,capex,mid,nifty200,INE208A01029,2026-04-17
+ASIANPAINT.NS,ASIANPAINT,Asian Paints Ltd.,Consumer Durables,consumption,large,nifty50,INE021A01026,2026-04-17
+ASTERDM.NS,ASTERDM,Aster DM Healthcare Ltd.,Healthcare,pharma,mid,nifty500,INE914M01019,2026-04-17
+ASTRAL.NS,ASTRAL,Astral Ltd.,Capital Goods,capex,mid,nifty200,INE006I01046,2026-04-17
+ATGL.NS,ATGL,Adani Total Gas Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty200,INE399L01023,2026-04-17
+ATHERENERG.NS,ATHERENERG,Ather Energy Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE0LEZ01016,2026-04-17
+ATUL.NS,ATUL,Atul Ltd.,Chemicals,chemicals,mid,nifty500,INE100A01010,2026-04-17
+AUBANK.NS,AUBANK,AU Small Finance Bank Ltd.,Financial Services,banking,mid,nifty200,INE949L01017,2026-04-17
+AUROPHARMA.NS,AUROPHARMA,Aurobindo Pharma Ltd.,Healthcare,pharma,mid,nifty200,INE406A01037,2026-04-17
+AWL.NS,AWL,AWL Agri Business Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE699H01024,2026-04-17
+AXISBANK.NS,AXISBANK,Axis Bank Ltd.,Financial Services,banking,large,nifty50,INE238A01034,2026-04-17
+BAJAJ-AUTO.NS,BAJAJ-AUTO,Bajaj Auto Ltd.,Automobile and Auto Components,auto,large,nifty50,INE917I01010,2026-04-17
+BAJAJFINSV.NS,BAJAJFINSV,Bajaj Finserv Ltd.,Financial Services,banking,large,nifty50,INE918I01026,2026-04-17
+BAJAJHFL.NS,BAJAJHFL,Bajaj Housing Finance Ltd.,Financial Services,banking,mid,nifty500,INE377Y01014,2026-04-17
+BAJAJHLDNG.NS,BAJAJHLDNG,Bajaj Holdings & Investment Ltd.,Financial Services,banking,large,nifty100,INE118A01012,2026-04-17
+BAJFINANCE.NS,BAJFINANCE,Bajaj Finance Ltd.,Financial Services,banking,large,nifty50,INE296A01032,2026-04-17
+BALKRISIND.NS,BALKRISIND,Balkrishna Industries Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE787D01026,2026-04-17
+BALRAMCHIN.NS,BALRAMCHIN,Balrampur Chini Mills Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE119A01028,2026-04-17
+BANDHANBNK.NS,BANDHANBNK,Bandhan Bank Ltd.,Financial Services,banking,mid,nifty500,INE545U01014,2026-04-17
+BANKBARODA.NS,BANKBARODA,Bank of Baroda,Financial Services,banking,large,nifty100,INE028A01039,2026-04-17
+BANKINDIA.NS,BANKINDIA,Bank of India,Financial Services,banking,mid,nifty200,INE084A01016,2026-04-17
+BATAINDIA.NS,BATAINDIA,Bata India Ltd.,Consumer Durables,consumption,mid,nifty500,INE176A01028,2026-04-17
+BAYERCROP.NS,BAYERCROP,Bayer Cropscience Ltd.,Chemicals,chemicals,mid,nifty500,INE462A01022,2026-04-17
+BBTC.NS,BBTC,Bombay Burmah Trading Corporation Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE050A01025,2026-04-17
+BDL.NS,BDL,Bharat Dynamics Ltd.,Capital Goods,capex,mid,nifty200,INE171Z01026,2026-04-17
+BEL.NS,BEL,Bharat Electronics Ltd.,Capital Goods,capex,large,nifty50,INE263A01024,2026-04-17
+BELRISE.NS,BELRISE,Belrise Industries Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE894V01022,2026-04-17
+BEML.NS,BEML,BEML Ltd.,Capital Goods,capex,mid,nifty500,INE258A01024,2026-04-17
+BERGEPAINT.NS,BERGEPAINT,Berger Paints India Ltd.,Consumer Durables,consumption,mid,nifty500,INE463A01038,2026-04-17
+BHARATFORG.NS,BHARATFORG,Bharat Forge Ltd.,Automobile and Auto Components,auto,mid,nifty200,INE465A01025,2026-04-17
+BHARTIARTL.NS,BHARTIARTL,Bharti Airtel Ltd.,Telecommunication,telecom,large,nifty50,INE397D01024,2026-04-17
+BHARTIHEXA.NS,BHARTIHEXA,Bharti Hexacom Ltd.,Telecommunication,telecom,mid,nifty500,INE343G01021,2026-04-17
+BHEL.NS,BHEL,Bharat Heavy Electricals Ltd.,Capital Goods,capex,mid,nifty200,INE257A01026,2026-04-17
+BIKAJI.NS,BIKAJI,Bikaji Foods International Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE00E101023,2026-04-17
+BIOCON.NS,BIOCON,Biocon Ltd.,Healthcare,pharma,mid,nifty200,INE376G01013,2026-04-17
+BLS.NS,BLS,BLS International Services Ltd.,Consumer Services,others,mid,nifty500,INE153T01027,2026-04-17
+BLUEDART.NS,BLUEDART,Blue Dart Express Ltd.,Services,services,mid,nifty500,INE233B01017,2026-04-17
+BLUEJET.NS,BLUEJET,Blue Jet Healthcare Ltd.,Healthcare,pharma,mid,nifty500,INE0KBH01020,2026-04-17
+BLUESTARCO.NS,BLUESTARCO,Blue Star Ltd.,Consumer Durables,consumption,mid,nifty200,INE472A01039,2026-04-17
+BOSCHLTD.NS,BOSCHLTD,Bosch Ltd.,Automobile and Auto Components,auto,large,nifty100,INE323A01026,2026-04-17
+BPCL.NS,BPCL,Bharat Petroleum Corporation Ltd.,Oil Gas & Consumable Fuels,metals,large,nifty100,INE029A01011,2026-04-17
+BRIGADE.NS,BRIGADE,Brigade Enterprises Ltd.,Realty,realty,mid,nifty500,INE791I01019,2026-04-17
+BRITANNIA.NS,BRITANNIA,Britannia Industries Ltd.,Fast Moving Consumer Goods,consumption,large,nifty100,INE216A01030,2026-04-17
+BSE.NS,BSE,BSE Ltd.,Financial Services,banking,mid,nifty200,INE118H01025,2026-04-17
+BSOFT.NS,BSOFT,Birlasoft Ltd.,Information Technology,nifty_it,mid,nifty500,INE836A01035,2026-04-17
+CAMS.NS,CAMS,Computer Age Management Services Ltd.,Financial Services,banking,mid,nifty500,INE596I01020,2026-04-17
+CANBK.NS,CANBK,Canara Bank,Financial Services,banking,large,nifty100,INE476A01022,2026-04-17
+CANFINHOME.NS,CANFINHOME,Can Fin Homes Ltd.,Financial Services,banking,mid,nifty500,INE477A01020,2026-04-17
+CANHLIFE.NS,CANHLIFE,Canara HSBC Life Insurance Company Ltd.,Financial Services,banking,mid,nifty500,INE01TY01017,2026-04-17
+CAPLIPOINT.NS,CAPLIPOINT,Caplin Point Laboratories Ltd.,Healthcare,pharma,mid,nifty500,INE475E01026,2026-04-17
+CARBORUNIV.NS,CARBORUNIV,Carborundum Universal Ltd.,Capital Goods,capex,mid,nifty500,INE120A01034,2026-04-17
+CARTRADE.NS,CARTRADE,Cartrade Tech Ltd.,Consumer Services,others,mid,nifty500,INE290S01011,2026-04-17
+CASTROLIND.NS,CASTROLIND,Castrol India Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE172A01027,2026-04-17
+CCL.NS,CCL,CCL Products (I) Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE421D01022,2026-04-17
+CDSL.NS,CDSL,Central Depository Services (India) Ltd.,Financial Services,banking,mid,nifty500,INE736A01011,2026-04-17
+CEATLTD.NS,CEATLTD,Ceat Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE482A01020,2026-04-17
+CEMPRO.NS,CEMPRO,Cemindia Projects Ltd.,Construction,capex,mid,nifty500,INE686A01026,2026-04-17
+CENTRALBK.NS,CENTRALBK,Central Bank of India,Financial Services,banking,mid,nifty500,INE483A01010,2026-04-17
+CESC.NS,CESC,CESC Ltd.,Power,capex,mid,nifty500,INE486A01021,2026-04-17
+CGCL.NS,CGCL,Capri Global Capital Ltd.,Financial Services,banking,mid,nifty500,INE180C01042,2026-04-17
+CGPOWER.NS,CGPOWER,CG Power and Industrial Solutions Ltd.,Capital Goods,capex,large,nifty100,INE067A01029,2026-04-17
+CHALET.NS,CHALET,Chalet Hotels Ltd.,Consumer Services,others,mid,nifty500,INE427F01016,2026-04-17
+CHAMBLFERT.NS,CHAMBLFERT,Chambal Fertilizers & Chemicals Ltd.,Chemicals,chemicals,mid,nifty500,INE085A01013,2026-04-17
+CHENNPETRO.NS,CHENNPETRO,Chennai Petroleum Corporation Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE178A01016,2026-04-17
+CHOICEIN.NS,CHOICEIN,Choice International Ltd.,Financial Services,banking,mid,nifty500,INE102B01014,2026-04-17
+CHOLAFIN.NS,CHOLAFIN,Cholamandalam Investment and Finance Company Ltd.,Financial Services,banking,large,nifty100,INE121A01024,2026-04-17
+CHOLAHLDNG.NS,CHOLAHLDNG,Cholamandalam Financial Holdings Ltd.,Financial Services,banking,mid,nifty500,INE149A01033,2026-04-17
+CIPLA.NS,CIPLA,Cipla Ltd.,Healthcare,pharma,large,nifty50,INE059A01026,2026-04-17
+CLEAN.NS,CLEAN,Clean Science and Technology Ltd.,Chemicals,chemicals,mid,nifty500,INE227W01023,2026-04-17
+COALINDIA.NS,COALINDIA,Coal India Ltd.,Oil Gas & Consumable Fuels,metals,large,nifty50,INE522F01014,2026-04-17
+COCHINSHIP.NS,COCHINSHIP,Cochin Shipyard Ltd.,Capital Goods,capex,mid,nifty200,INE704P01025,2026-04-17
+COFORGE.NS,COFORGE,Coforge Ltd.,Information Technology,nifty_it,mid,nifty200,INE591G01025,2026-04-17
+COHANCE.NS,COHANCE,Cohance Lifesciences Ltd.,Healthcare,pharma,mid,nifty500,INE03QK01018,2026-04-17
+COLPAL.NS,COLPAL,Colgate Palmolive (India) Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty200,INE259A01022,2026-04-17
+CONCOR.NS,CONCOR,Container Corporation of India Ltd.,Services,services,mid,nifty200,INE111A01025,2026-04-17
+CONCORDBIO.NS,CONCORDBIO,Concord Biotech Ltd.,Healthcare,pharma,mid,nifty500,INE338H01029,2026-04-17
+COROMANDEL.NS,COROMANDEL,Coromandel International Ltd.,Chemicals,chemicals,mid,nifty200,INE169A01031,2026-04-17
+CPPLUS.NS,CPPLUS,Aditya Infotech Ltd.,Capital Goods,capex,mid,nifty500,INE819V01029,2026-04-17
+CRAFTSMAN.NS,CRAFTSMAN,Craftsman Automation Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE00LO01017,2026-04-17
+CREDITACC.NS,CREDITACC,CreditAccess Grameen Ltd.,Financial Services,banking,mid,nifty500,INE741K01010,2026-04-17
+CRISIL.NS,CRISIL,CRISIL Ltd.,Financial Services,banking,mid,nifty500,INE007A01025,2026-04-17
+CROMPTON.NS,CROMPTON,Crompton Greaves Consumer Electricals Ltd.,Consumer Durables,consumption,mid,nifty500,INE299U01018,2026-04-17
+CUB.NS,CUB,City Union Bank Ltd.,Financial Services,banking,mid,nifty500,INE491A01021,2026-04-17
+CUMMINSIND.NS,CUMMINSIND,Cummins India Ltd.,Capital Goods,capex,large,nifty100,INE298A01020,2026-04-17
+CYIENT.NS,CYIENT,Cyient Ltd.,Information Technology,nifty_it,mid,nifty500,INE136B01020,2026-04-17
+DABUR.NS,DABUR,Dabur India Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty200,INE016A01026,2026-04-17
+DALBHARAT.NS,DALBHARAT,Dalmia Bharat Ltd.,Construction Materials,others,mid,nifty500,INE00R701025,2026-04-17
+DATAPATTNS.NS,DATAPATTNS,Data Patterns (India) Ltd.,Capital Goods,capex,mid,nifty500,INE0IX101010,2026-04-17
+DCMSHRIRAM.NS,DCMSHRIRAM,DCM Shriram Ltd.,Diversified,others,mid,nifty500,INE499A01024,2026-04-17
+DEEPAKFERT.NS,DEEPAKFERT,Deepak Fertilisers & Petrochemicals Corp. Ltd.,Chemicals,chemicals,mid,nifty500,INE501A01019,2026-04-17
+DEEPAKNTR.NS,DEEPAKNTR,Deepak Nitrite Ltd.,Chemicals,chemicals,mid,nifty500,INE288B01029,2026-04-17
+DELHIVERY.NS,DELHIVERY,Delhivery Ltd.,Services,services,mid,nifty500,INE148O01028,2026-04-17
+DEVYANI.NS,DEVYANI,Devyani International Ltd.,Consumer Services,others,mid,nifty500,INE872J01023,2026-04-17
+DIVISLAB.NS,DIVISLAB,Divi's Laboratories Ltd.,Healthcare,pharma,large,nifty100,INE361B01024,2026-04-17
+DIXON.NS,DIXON,Dixon Technologies (India) Ltd.,Consumer Durables,consumption,mid,nifty200,INE935N01020,2026-04-17
+DLF.NS,DLF,DLF Ltd.,Realty,realty,large,nifty100,INE271C01023,2026-04-17
+DMART.NS,DMART,Avenue Supermarts Ltd.,Consumer Services,others,large,nifty100,INE192R01011,2026-04-17
+DOMS.NS,DOMS,DOMS Industries Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE321T01012,2026-04-17
+DRREDDY.NS,DRREDDY,Dr. Reddy's Laboratories Ltd.,Healthcare,pharma,large,nifty50,INE089A01031,2026-04-17
+ECLERX.NS,ECLERX,eClerx Services Ltd.,Services,services,mid,nifty500,INE738I01010,2026-04-17
+EICHERMOT.NS,EICHERMOT,Eicher Motors Ltd.,Automobile and Auto Components,auto,large,nifty50,INE066A01021,2026-04-17
+EIDPARRY.NS,EIDPARRY,E.I.D. Parry (India) Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE126A01031,2026-04-17
+EIHOTEL.NS,EIHOTEL,EIH Ltd.,Consumer Services,others,mid,nifty500,INE230A01023,2026-04-17
+ELECON.NS,ELECON,Elecon Engineering Co. Ltd.,Capital Goods,capex,mid,nifty500,INE205B01031,2026-04-17
+ELGIEQUIP.NS,ELGIEQUIP,Elgi Equipments Ltd.,Capital Goods,capex,mid,nifty500,INE285A01027,2026-04-17
+EMAMILTD.NS,EMAMILTD,Emami Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE548C01032,2026-04-17
+EMCURE.NS,EMCURE,Emcure Pharmaceuticals Ltd.,Healthcare,pharma,mid,nifty500,INE168P01015,2026-04-17
+EMMVEE.NS,EMMVEE,Emmvee Photovoltaic Power Ltd.,Capital Goods,capex,mid,nifty500,INE1C6T01020,2026-04-17
+ENDURANCE.NS,ENDURANCE,Endurance Technologies Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE913H01037,2026-04-17
+ENGINERSIN.NS,ENGINERSIN,Engineers India Ltd.,Construction,capex,mid,nifty500,INE510A01028,2026-04-17
+ENRIN.NS,ENRIN,Siemens Energy India Ltd.,Capital Goods,capex,large,nifty100,INE1NPP01017,2026-04-17
+ERIS.NS,ERIS,Eris Lifesciences Ltd.,Healthcare,pharma,mid,nifty500,INE406M01024,2026-04-17
+ESCORTS.NS,ESCORTS,Escorts Kubota Ltd.,Capital Goods,capex,mid,nifty500,INE042A01014,2026-04-17
+ETERNAL.NS,ETERNAL,Eternal Ltd.,Consumer Services,others,large,nifty50,INE758T01015,2026-04-17
+EXIDEIND.NS,EXIDEIND,Exide Industries Ltd.,Automobile and Auto Components,auto,mid,nifty200,INE302A01020,2026-04-17
+FACT.NS,FACT,Fertilisers and Chemicals Travancore Ltd.,Chemicals,chemicals,mid,nifty500,INE188A01015,2026-04-17
+FEDERALBNK.NS,FEDERALBNK,Federal Bank Ltd.,Financial Services,banking,mid,nifty200,INE171A01029,2026-04-17
+FINCABLES.NS,FINCABLES,Finolex Cables Ltd.,Capital Goods,capex,mid,nifty500,INE235A01022,2026-04-17
+FIRSTCRY.NS,FIRSTCRY,Brainbees Solutions Ltd.,Consumer Services,others,mid,nifty500,INE02RE01045,2026-04-17
+FIVESTAR.NS,FIVESTAR,Five-Star Business Finance Ltd.,Financial Services,banking,mid,nifty500,INE128S01021,2026-04-17
+FLUOROCHEM.NS,FLUOROCHEM,Gujarat Fluorochemicals Ltd.,Chemicals,chemicals,mid,nifty500,INE09N301011,2026-04-17
+FORCEMOT.NS,FORCEMOT,Force Motors Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE451A01017,2026-04-17
+FORTIS.NS,FORTIS,Fortis Healthcare Ltd.,Healthcare,pharma,mid,nifty200,INE061F01013,2026-04-17
+FSL.NS,FSL,Firstsource Solutions Ltd.,Services,services,mid,nifty500,INE684F01012,2026-04-17
+GABRIEL.NS,GABRIEL,Gabriel India Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE524A01029,2026-04-17
+GAIL.NS,GAIL,GAIL (India) Ltd.,Oil Gas & Consumable Fuels,metals,large,nifty100,INE129A01019,2026-04-17
+GALLANTT.NS,GALLANTT,Gallantt Ispat Ltd.,Capital Goods,capex,mid,nifty500,INE297H01019,2026-04-17
+GESHIP.NS,GESHIP,Great Eastern Shipping Co. Ltd.,Services,services,mid,nifty500,INE017A01032,2026-04-17
+GICRE.NS,GICRE,General Insurance Corporation of India,Financial Services,banking,mid,nifty500,INE481Y01014,2026-04-17
+GILLETTE.NS,GILLETTE,Gillette India Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE322A01010,2026-04-17
+GLAND.NS,GLAND,Gland Pharma Ltd.,Healthcare,pharma,mid,nifty500,INE068V01023,2026-04-17
+GLAXO.NS,GLAXO,Glaxosmithkline Pharmaceuticals Ltd.,Healthcare,pharma,mid,nifty500,INE159A01016,2026-04-17
+GLENMARK.NS,GLENMARK,Glenmark Pharmaceuticals Ltd.,Healthcare,pharma,mid,nifty200,INE935A01035,2026-04-17
+GMDCLTD.NS,GMDCLTD,Gujarat Mineral Development Corporation Ltd.,Metals & Mining,metals,mid,nifty500,INE131A01031,2026-04-17
+GMRAIRPORT.NS,GMRAIRPORT,GMR Airports Ltd.,Services,services,mid,nifty200,INE776C01039,2026-04-17
+GODFRYPHLP.NS,GODFRYPHLP,Godfrey Phillips India Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty200,INE260B01028,2026-04-17
+GODIGIT.NS,GODIGIT,Go Digit General Insurance Ltd.,Financial Services,banking,mid,nifty500,INE03JT01014,2026-04-17
+GODREJCP.NS,GODREJCP,Godrej Consumer Products Ltd.,Fast Moving Consumer Goods,consumption,large,nifty100,INE102D01028,2026-04-17
+GODREJIND.NS,GODREJIND,Godrej Industries Ltd.,Diversified,others,mid,nifty500,INE233A01035,2026-04-17
+GODREJPROP.NS,GODREJPROP,Godrej Properties Ltd.,Realty,realty,mid,nifty200,INE484J01027,2026-04-17
+GPIL.NS,GPIL,Godawari Power & Ispat Ltd.,Capital Goods,capex,mid,nifty500,INE177H01039,2026-04-17
+GRANULES.NS,GRANULES,Granules India Ltd.,Healthcare,pharma,mid,nifty500,INE101D01020,2026-04-17
+GRAPHITE.NS,GRAPHITE,Graphite India Ltd.,Capital Goods,capex,mid,nifty500,INE371A01025,2026-04-17
+GRASIM.NS,GRASIM,Grasim Industries Ltd.,Construction Materials,others,large,nifty50,INE047A01021,2026-04-17
+GRAVITA.NS,GRAVITA,Gravita India Ltd.,Metals & Mining,metals,mid,nifty500,INE024L01027,2026-04-17
+GROWW.NS,GROWW,Billionbrains Garage Ventures Ltd.,Financial Services,banking,mid,nifty200,INE0HOQ01053,2026-04-17
+GRSE.NS,GRSE,Garden Reach Shipbuilders & Engineers Ltd.,Capital Goods,capex,mid,nifty500,INE382Z01011,2026-04-17
+GSPL.NS,GSPL,Gujarat State Petronet Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE246F01010,2026-04-17
+GVT&D.NS,GVT&D,GE Vernova T&D India Ltd.,Capital Goods,capex,mid,nifty200,INE200A01026,2026-04-17
+HAL.NS,HAL,Hindustan Aeronautics Ltd.,Capital Goods,capex,large,nifty100,INE066F01020,2026-04-17
+HAVELLS.NS,HAVELLS,Havells India Ltd.,Consumer Durables,consumption,mid,nifty200,INE176B01034,2026-04-17
+HBLENGINE.NS,HBLENGINE,HBL Engineering Ltd.,Capital Goods,capex,mid,nifty500,INE292B01021,2026-04-17
+HCLTECH.NS,HCLTECH,HCL Technologies Ltd.,Information Technology,nifty_it,large,nifty50,INE860A01027,2026-04-17
+HDBFS.NS,HDBFS,HDB Financial Services Ltd.,Financial Services,banking,mid,nifty500,INE756I01012,2026-04-17
+HDFCAMC.NS,HDFCAMC,HDFC Asset Management Company Ltd.,Financial Services,banking,large,nifty100,INE127D01025,2026-04-17
+HDFCBANK.NS,HDFCBANK,HDFC Bank Ltd.,Financial Services,banking,large,nifty50,INE040A01034,2026-04-17
+HDFCLIFE.NS,HDFCLIFE,HDFC Life Insurance Company Ltd.,Financial Services,banking,large,nifty50,INE795G01014,2026-04-17
+HEG.NS,HEG,H.E.G. Ltd.,Capital Goods,capex,mid,nifty500,INE545A01024,2026-04-17
+HEROMOTOCO.NS,HEROMOTOCO,Hero MotoCorp Ltd.,Automobile and Auto Components,auto,mid,nifty200,INE158A01026,2026-04-17
+HEXT.NS,HEXT,Hexaware Technologies Ltd.,Information Technology,nifty_it,mid,nifty500,INE093A01041,2026-04-17
+HFCL.NS,HFCL,HFCL Ltd.,Telecommunication,telecom,mid,nifty500,INE548A01028,2026-04-17
+HINDALCO.NS,HINDALCO,Hindalco Industries Ltd.,Metals & Mining,metals,large,nifty50,INE038A01020,2026-04-17
+HINDCOPPER.NS,HINDCOPPER,Hindustan Copper Ltd.,Metals & Mining,metals,mid,nifty500,INE531E01026,2026-04-17
+HINDPETRO.NS,HINDPETRO,Hindustan Petroleum Corporation Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty200,INE094A01015,2026-04-17
+HINDUNILVR.NS,HINDUNILVR,Hindustan Unilever Ltd.,Fast Moving Consumer Goods,consumption,large,nifty50,INE030A01027,2026-04-17
+HINDZINC.NS,HINDZINC,Hindustan Zinc Ltd.,Metals & Mining,metals,large,nifty100,INE267A01025,2026-04-17
+HOMEFIRST.NS,HOMEFIRST,Home First Finance Company India Ltd.,Financial Services,banking,mid,nifty500,INE481N01025,2026-04-17
+HONASA.NS,HONASA,Honasa Consumer Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE0J5401028,2026-04-17
+HONAUT.NS,HONAUT,Honeywell Automation India Ltd.,Capital Goods,capex,mid,nifty500,INE671A01010,2026-04-17
+HSCL.NS,HSCL,Himadri Speciality Chemical Ltd.,Chemicals,chemicals,mid,nifty500,INE019C01026,2026-04-17
+HUDCO.NS,HUDCO,Housing & Urban Development Corporation Ltd.,Financial Services,banking,mid,nifty200,INE031A01017,2026-04-17
+HYUNDAI.NS,HYUNDAI,Hyundai Motor India Ltd.,Automobile and Auto Components,auto,large,nifty100,INE0V6F01027,2026-04-17
+ICICIAMC.NS,ICICIAMC,ICICI Prudential Asset Management Company Ltd.,Financial Services,banking,mid,nifty200,INE346A01027,2026-04-17
+ICICIBANK.NS,ICICIBANK,ICICI Bank Ltd.,Financial Services,banking,large,nifty50,INE090A01021,2026-04-17
+ICICIGI.NS,ICICIGI,ICICI Lombard General Insurance Company Ltd.,Financial Services,banking,mid,nifty200,INE765G01017,2026-04-17
+ICICIPRULI.NS,ICICIPRULI,ICICI Prudential Life Insurance Company Ltd.,Financial Services,banking,mid,nifty500,INE726G01019,2026-04-17
+IDBI.NS,IDBI,IDBI Bank Ltd.,Financial Services,banking,mid,nifty500,INE008A01015,2026-04-17
+IDEA.NS,IDEA,Vodafone Idea Ltd.,Telecommunication,telecom,mid,nifty200,INE669E01016,2026-04-17
+IDFCFIRSTB.NS,IDFCFIRSTB,IDFC First Bank Ltd.,Financial Services,banking,mid,nifty200,INE092T01019,2026-04-17
+IEX.NS,IEX,Indian Energy Exchange Ltd.,Financial Services,banking,mid,nifty500,INE022Q01020,2026-04-17
+IFCI.NS,IFCI,IFCI Ltd.,Financial Services,banking,mid,nifty500,INE039A01010,2026-04-17
+IGIL.NS,IGIL,International Gemmological Institute (India) Ltd.,Services,services,mid,nifty500,INE0Q9301021,2026-04-17
+IGL.NS,IGL,Indraprastha Gas Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE203G01027,2026-04-17
+IIFL.NS,IIFL,IIFL Finance Ltd.,Financial Services,banking,mid,nifty500,INE530B01024,2026-04-17
+IKS.NS,IKS,Inventurus Knowledge Solutions Ltd.,Information Technology,nifty_it,mid,nifty500,INE115Q01022,2026-04-17
+INDGN.NS,INDGN,Indegene Ltd.,Healthcare,pharma,mid,nifty500,INE065X01017,2026-04-17
+INDHOTEL.NS,INDHOTEL,Indian Hotels Co. Ltd.,Consumer Services,others,large,nifty100,INE053A01029,2026-04-17
+INDIACEM.NS,INDIACEM,India Cements Ltd.,Construction Materials,others,mid,nifty500,INE383A01012,2026-04-17
+INDIAMART.NS,INDIAMART,Indiamart Intermesh Ltd.,Consumer Services,others,mid,nifty500,INE933S01016,2026-04-17
+INDIANB.NS,INDIANB,Indian Bank,Financial Services,banking,mid,nifty200,INE562A01011,2026-04-17
+INDIGO.NS,INDIGO,InterGlobe Aviation Ltd.,Services,services,large,nifty50,INE646L01027,2026-04-17
+INDUSINDBK.NS,INDUSINDBK,IndusInd Bank Ltd.,Financial Services,banking,mid,nifty200,INE095A01012,2026-04-17
+INDUSTOWER.NS,INDUSTOWER,Indus Towers Ltd.,Telecommunication,telecom,mid,nifty200,INE121J01017,2026-04-17
+INFY.NS,INFY,Infosys Ltd.,Information Technology,nifty_it,large,nifty50,INE009A01021,2026-04-17
+INOXWIND.NS,INOXWIND,Inox Wind Ltd.,Capital Goods,capex,mid,nifty500,INE066P01011,2026-04-17
+INTELLECT.NS,INTELLECT,Intellect Design Arena Ltd.,Information Technology,nifty_it,mid,nifty500,INE306R01017,2026-04-17
+IOB.NS,IOB,Indian Overseas Bank,Financial Services,banking,mid,nifty500,INE565A01014,2026-04-17
+IOC.NS,IOC,Indian Oil Corporation Ltd.,Oil Gas & Consumable Fuels,metals,large,nifty100,INE242A01010,2026-04-17
+IPCALAB.NS,IPCALAB,Ipca Laboratories Ltd.,Healthcare,pharma,mid,nifty500,INE571A01038,2026-04-17
+IRB.NS,IRB,IRB Infrastructure Developers Ltd.,Construction,capex,mid,nifty500,INE821I01022,2026-04-17
+IRCON.NS,IRCON,IRCON International Ltd.,Construction,capex,mid,nifty500,INE962Y01021,2026-04-17
+IRCTC.NS,IRCTC,Indian Railway Catering And Tourism Corporation Ltd.,Consumer Services,others,mid,nifty200,INE335Y01020,2026-04-17
+IREDA.NS,IREDA,Indian Renewable Energy Development Agency Ltd.,Financial Services,banking,mid,nifty200,INE202E01016,2026-04-17
+IRFC.NS,IRFC,Indian Railway Finance Corporation Ltd.,Financial Services,banking,large,nifty100,INE053F01010,2026-04-17
+ITC.NS,ITC,ITC Ltd.,Fast Moving Consumer Goods,consumption,large,nifty50,INE154A01025,2026-04-17
+ITCHOTELS.NS,ITCHOTELS,ITC Hotels Ltd.,Consumer Services,others,mid,nifty500,INE379A01028,2026-04-17
+ITI.NS,ITI,ITI Ltd.,Telecommunication,telecom,mid,nifty500,INE248A01017,2026-04-17
+J&KBANK.NS,J&KBANK,Jammu & Kashmir Bank Ltd.,Financial Services,banking,mid,nifty500,INE168A01041,2026-04-17
+JAINREC.NS,JAINREC,Jain Resource Recycling Ltd.,Metals & Mining,metals,mid,nifty500,INE0YD401026,2026-04-17
+JBCHEPHARM.NS,JBCHEPHARM,J.B. Chemicals & Pharmaceuticals Ltd.,Healthcare,pharma,mid,nifty500,INE572A01036,2026-04-17
+JBMA.NS,JBMA,JBM Auto Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE927D01051,2026-04-17
+JINDALSAW.NS,JINDALSAW,Jindal Saw Ltd.,Capital Goods,capex,mid,nifty500,INE324A01032,2026-04-17
+JINDALSTEL.NS,JINDALSTEL,Jindal Steel Ltd.,Metals & Mining,metals,large,nifty100,INE749A01030,2026-04-17
+JIOFIN.NS,JIOFIN,Jio Financial Services Ltd.,Financial Services,banking,large,nifty50,INE758E01017,2026-04-17
+JKCEMENT.NS,JKCEMENT,J.K. Cement Ltd.,Construction Materials,others,mid,nifty500,INE823G01014,2026-04-17
+JKTYRE.NS,JKTYRE,JK Tyre & Industries Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE573A01042,2026-04-17
+JMFINANCIL.NS,JMFINANCIL,JM Financial Ltd.,Financial Services,banking,mid,nifty500,INE780C01023,2026-04-17
+JPPOWER.NS,JPPOWER,Jaiprakash Power Ventures Ltd.,Power,capex,mid,nifty500,INE351F01018,2026-04-17
+JSL.NS,JSL,Jindal Stainless Ltd.,Metals & Mining,metals,mid,nifty500,INE220G01021,2026-04-17
+JSWCEMENT.NS,JSWCEMENT,JSW Cement Ltd.,Construction Materials,others,mid,nifty500,INE718I01012,2026-04-17
+JSWDULUX.NS,JSWDULUX,JSW Dulux Ltd.,Consumer Durables,consumption,mid,nifty500,INE133A01011,2026-04-17
+JSWENERGY.NS,JSWENERGY,JSW Energy Ltd.,Power,capex,mid,nifty200,INE121E01018,2026-04-17
+JSWINFRA.NS,JSWINFRA,JSW Infrastructure Ltd.,Services,services,mid,nifty500,INE880J01026,2026-04-17
+JSWSTEEL.NS,JSWSTEEL,JSW Steel Ltd.,Metals & Mining,metals,large,nifty50,INE019A01038,2026-04-17
+JUBLFOOD.NS,JUBLFOOD,Jubilant Foodworks Ltd.,Consumer Services,others,mid,nifty200,INE797F01020,2026-04-17
+JUBLINGREA.NS,JUBLINGREA,Jubilant Ingrevia Ltd.,Chemicals,chemicals,mid,nifty500,INE0BY001018,2026-04-17
+JUBLPHARMA.NS,JUBLPHARMA,Jubilant Pharmova Ltd.,Healthcare,pharma,mid,nifty500,INE700A01033,2026-04-17
+JWL.NS,JWL,Jupiter Wagons Ltd.,Capital Goods,capex,mid,nifty500,INE209L01016,2026-04-17
+JYOTICNC.NS,JYOTICNC,Jyoti CNC Automation Ltd.,Capital Goods,capex,mid,nifty500,INE980O01024,2026-04-17
+KAJARIACER.NS,KAJARIACER,Kajaria Ceramics Ltd.,Consumer Durables,consumption,mid,nifty500,INE217B01036,2026-04-17
+KALYANKJIL.NS,KALYANKJIL,Kalyan Jewellers India Ltd.,Consumer Durables,consumption,mid,nifty200,INE303R01014,2026-04-17
+KARURVYSYA.NS,KARURVYSYA,Karur Vysya Bank Ltd.,Financial Services,banking,mid,nifty500,INE036D01028,2026-04-17
+KAYNES.NS,KAYNES,Kaynes Technology India Ltd.,Capital Goods,capex,mid,nifty500,INE918Z01012,2026-04-17
+KEC.NS,KEC,Kec International Ltd.,Construction,capex,mid,nifty500,INE389H01022,2026-04-17
+KEI.NS,KEI,KEI Industries Ltd.,Capital Goods,capex,mid,nifty200,INE878B01027,2026-04-17
+KFINTECH.NS,KFINTECH,Kfin Technologies Ltd.,Financial Services,banking,mid,nifty500,INE138Y01010,2026-04-17
+KIMS.NS,KIMS,Krishna Institute of Medical Sciences Ltd.,Healthcare,pharma,mid,nifty500,INE967H01025,2026-04-17
+KIRLOSENG.NS,KIRLOSENG,Kirloskar Oil Eng Ltd.,Capital Goods,capex,mid,nifty500,INE146L01010,2026-04-17
+KOTAKBANK.NS,KOTAKBANK,Kotak Mahindra Bank Ltd.,Financial Services,banking,large,nifty50,INE237A01036,2026-04-17
+KPIL.NS,KPIL,Kalpataru Projects International Ltd.,Construction,capex,mid,nifty500,INE220B01022,2026-04-17
+KPITTECH.NS,KPITTECH,KPIT Technologies Ltd.,Information Technology,nifty_it,mid,nifty200,INE04I401011,2026-04-17
+KPRMILL.NS,KPRMILL,K.P.R. Mill Ltd.,Textiles,consumption,mid,nifty500,INE930H01031,2026-04-17
+LALPATHLAB.NS,LALPATHLAB,Dr. Lal Path Labs Ltd.,Healthcare,pharma,mid,nifty500,INE600L01024,2026-04-17
+LATENTVIEW.NS,LATENTVIEW,Latent View Analytics Ltd.,Information Technology,nifty_it,mid,nifty500,INE0I7C01011,2026-04-17
+LAURUSLABS.NS,LAURUSLABS,Laurus Labs Ltd.,Healthcare,pharma,mid,nifty200,INE947Q01028,2026-04-17
+LEMONTREE.NS,LEMONTREE,Lemon Tree Hotels Ltd.,Consumer Services,others,mid,nifty500,INE970X01018,2026-04-17
+LENSKART.NS,LENSKART,Lenskart Solutions Ltd.,Consumer Services,others,mid,nifty200,INE956O01016,2026-04-17
+LGEINDIA.NS,LGEINDIA,LG Electronics India Ltd.,Consumer Durables,consumption,mid,nifty200,INE324D01010,2026-04-17
+LICHSGFIN.NS,LICHSGFIN,LIC Housing Finance Ltd.,Financial Services,banking,mid,nifty200,INE115A01026,2026-04-17
+LICI.NS,LICI,Life Insurance Corporation of India,Financial Services,banking,mid,nifty500,INE0J1Y01017,2026-04-17
+LINDEINDIA.NS,LINDEINDIA,Linde India Ltd.,Chemicals,chemicals,mid,nifty500,INE473A01011,2026-04-17
+LLOYDSME.NS,LLOYDSME,Lloyds Metals And Energy Ltd.,Metals & Mining,metals,mid,nifty500,INE281B01032,2026-04-17
+LODHA.NS,LODHA,Lodha Developers Ltd.,Realty,realty,large,nifty100,INE670K01029,2026-04-17
+LT.NS,LT,Larsen & Toubro Ltd.,Construction,capex,large,nifty50,INE018A01030,2026-04-17
+LTF.NS,LTF,L&T Finance Ltd.,Financial Services,banking,mid,nifty200,INE498L01015,2026-04-17
+LTFOODS.NS,LTFOODS,LT Foods Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE818H01020,2026-04-17
+LTM.NS,LTM,LTM Ltd.,Information Technology,nifty_it,large,nifty100,INE214T01019,2026-04-17
+LTTS.NS,LTTS,L&T Technology Services Ltd.,Information Technology,nifty_it,mid,nifty500,INE010V01017,2026-04-17
+LUPIN.NS,LUPIN,Lupin Ltd.,Healthcare,pharma,mid,nifty200,INE326A01037,2026-04-17
+M&M.NS,M&M,Mahindra & Mahindra Ltd.,Automobile and Auto Components,auto,large,nifty50,INE101A01026,2026-04-17
+M&MFIN.NS,M&MFIN,Mahindra & Mahindra Financial Services Ltd.,Financial Services,banking,mid,nifty200,INE774D01024,2026-04-17
+MAHABANK.NS,MAHABANK,Bank of Maharashtra,Financial Services,banking,mid,nifty500,INE457A01014,2026-04-17
+MANAPPURAM.NS,MANAPPURAM,Manappuram Finance Ltd.,Financial Services,banking,mid,nifty500,INE522D01027,2026-04-17
+MANKIND.NS,MANKIND,Mankind Pharma Ltd.,Healthcare,pharma,mid,nifty200,INE634S01028,2026-04-17
+MAPMYINDIA.NS,MAPMYINDIA,C.E. Info Systems Ltd.,Information Technology,nifty_it,mid,nifty500,INE0BV301023,2026-04-17
+MARICO.NS,MARICO,Marico Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty200,INE196A01026,2026-04-17
+MARUTI.NS,MARUTI,Maruti Suzuki India Ltd.,Automobile and Auto Components,auto,large,nifty50,INE585B01010,2026-04-17
+MAXHEALTH.NS,MAXHEALTH,Max Healthcare Institute Ltd.,Healthcare,pharma,large,nifty50,INE027H01010,2026-04-17
+MAZDOCK.NS,MAZDOCK,Mazagoan Dock Shipbuilders Ltd.,Capital Goods,capex,large,nifty100,INE249Z01020,2026-04-17
+MCX.NS,MCX,Multi Commodity Exchange of India Ltd.,Financial Services,banking,mid,nifty200,INE745G01043,2026-04-17
+MEDANTA.NS,MEDANTA,Global Health Ltd.,Healthcare,pharma,mid,nifty500,INE474Q01031,2026-04-17
+MEESHO.NS,MEESHO,Meesho Ltd.,Consumer Services,others,mid,nifty500,INE0VDM01015,2026-04-17
+MFSL.NS,MFSL,Max Financial Services Ltd.,Financial Services,banking,mid,nifty200,INE180A01020,2026-04-17
+MGL.NS,MGL,Mahanagar Gas Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE002S01010,2026-04-17
+MINDACORP.NS,MINDACORP,Minda Corporation Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE842C01021,2026-04-17
+MMTC.NS,MMTC,MMTC Ltd.,Services,services,mid,nifty500,INE123F01029,2026-04-17
+MOTHERSON.NS,MOTHERSON,Samvardhana Motherson International Ltd.,Automobile and Auto Components,auto,large,nifty100,INE775A01035,2026-04-17
+MOTILALOFS.NS,MOTILALOFS,Motilal Oswal Financial Services Ltd.,Financial Services,banking,mid,nifty200,INE338I01027,2026-04-17
+MPHASIS.NS,MPHASIS,MphasiS Ltd.,Information Technology,nifty_it,mid,nifty200,INE356A01018,2026-04-17
+MRF.NS,MRF,MRF Ltd.,Automobile and Auto Components,auto,mid,nifty200,INE883A01011,2026-04-17
+MRPL.NS,MRPL,Mangalore Refinery & Petrochemicals Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE103A01014,2026-04-17
+MSUMI.NS,MSUMI,Motherson Sumi Wiring India Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE0FS801015,2026-04-17
+MUTHOOTFIN.NS,MUTHOOTFIN,Muthoot Finance Ltd.,Financial Services,banking,large,nifty100,INE414G01012,2026-04-17
+NAM-INDIA.NS,NAM-INDIA,Nippon Life India Asset Management Ltd.,Financial Services,banking,mid,nifty500,INE298J01013,2026-04-17
+NATCOPHARM.NS,NATCOPHARM,NATCO Pharma Ltd.,Healthcare,pharma,mid,nifty500,INE987B01026,2026-04-17
+NATIONALUM.NS,NATIONALUM,National Aluminium Co. Ltd.,Metals & Mining,metals,mid,nifty200,INE139A01034,2026-04-17
+NAUKRI.NS,NAUKRI,Info Edge (India) Ltd.,Consumer Services,others,mid,nifty200,INE663F01032,2026-04-17
+NAVA.NS,NAVA,Nava Ltd.,Power,capex,mid,nifty500,INE725A01030,2026-04-17
+NAVINFLUOR.NS,NAVINFLUOR,Navin Fluorine International Ltd.,Chemicals,chemicals,mid,nifty500,INE048G01026,2026-04-17
+NBCC.NS,NBCC,NBCC (India) Ltd.,Construction,capex,mid,nifty500,INE095N01031,2026-04-17
+NCC.NS,NCC,NCC Ltd.,Construction,capex,mid,nifty500,INE868B01028,2026-04-17
+NESTLEIND.NS,NESTLEIND,Nestle India Ltd.,Fast Moving Consumer Goods,consumption,large,nifty50,INE239A01024,2026-04-17
+NETWEB.NS,NETWEB,Netweb Technologies India Ltd.,Information Technology,nifty_it,mid,nifty500,INE0NT901020,2026-04-17
+NEULANDLAB.NS,NEULANDLAB,Neuland Laboratories Ltd.,Healthcare,pharma,mid,nifty500,INE794A01010,2026-04-17
+NEWGEN.NS,NEWGEN,Newgen Software Technologies Ltd.,Information Technology,nifty_it,mid,nifty500,INE619B01017,2026-04-17
+NH.NS,NH,Narayana Hrudayalaya Ltd.,Healthcare,pharma,mid,nifty500,INE410P01011,2026-04-17
+NHPC.NS,NHPC,NHPC Ltd.,Power,capex,mid,nifty200,INE848E01016,2026-04-17
+NIACL.NS,NIACL,The New India Assurance Company Ltd.,Financial Services,banking,mid,nifty500,INE470Y01017,2026-04-17
+NIVABUPA.NS,NIVABUPA,Niva Bupa Health Insurance Company Ltd.,Financial Services,banking,mid,nifty500,INE995S01015,2026-04-17
+NLCINDIA.NS,NLCINDIA,NLC India Ltd.,Power,capex,mid,nifty500,INE589A01014,2026-04-17
+NMDC.NS,NMDC,NMDC Ltd.,Metals & Mining,metals,mid,nifty200,INE584A01023,2026-04-17
+NSLNISP.NS,NSLNISP,NMDC Steel Ltd.,Metals & Mining,metals,mid,nifty500,INE0NNS01018,2026-04-17
+NTPC.NS,NTPC,NTPC Ltd.,Power,capex,large,nifty50,INE733E01010,2026-04-17
+NTPCGREEN.NS,NTPCGREEN,NTPC Green Energy Ltd.,Power,capex,mid,nifty500,INE0ONG01011,2026-04-17
+NUVAMA.NS,NUVAMA,Nuvama Wealth Management Ltd.,Financial Services,banking,mid,nifty500,INE531F01023,2026-04-17
+NUVOCO.NS,NUVOCO,Nuvoco Vistas Corporation Ltd.,Construction Materials,others,mid,nifty500,INE118D01016,2026-04-17
+NYKAA.NS,NYKAA,FSN E-Commerce Ventures Ltd.,Consumer Services,others,mid,nifty200,INE388Y01029,2026-04-17
+OBEROIRLTY.NS,OBEROIRLTY,Oberoi Realty Ltd.,Realty,realty,mid,nifty200,INE093I01010,2026-04-17
+OFSS.NS,OFSS,Oracle Financial Services Software Ltd.,Information Technology,nifty_it,mid,nifty200,INE881D01027,2026-04-17
+OIL.NS,OIL,Oil India Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty200,INE274J01014,2026-04-17
+OLAELEC.NS,OLAELEC,Ola Electric Mobility Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE0LXG01040,2026-04-17
+OLECTRA.NS,OLECTRA,Olectra Greentech Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE260D01016,2026-04-17
+ONESOURCE.NS,ONESOURCE,Onesource Specialty Pharma Ltd.,Healthcare,pharma,mid,nifty500,INE013P01021,2026-04-17
+ONGC.NS,ONGC,Oil & Natural Gas Corporation Ltd.,Oil Gas & Consumable Fuels,metals,large,nifty50,INE213A01029,2026-04-17
+PAGEIND.NS,PAGEIND,Page Industries Ltd.,Textiles,consumption,mid,nifty200,INE761H01022,2026-04-17
+PARADEEP.NS,PARADEEP,Paradeep Phosphates Ltd.,Chemicals,chemicals,mid,nifty500,INE088F01024,2026-04-17
+PATANJALI.NS,PATANJALI,Patanjali Foods Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty200,INE619A01035,2026-04-17
+PAYTM.NS,PAYTM,One 97 Communications Ltd.,Financial Services,banking,mid,nifty200,INE982J01020,2026-04-17
+PCBL.NS,PCBL,PCBL Chemical Ltd.,Chemicals,chemicals,mid,nifty500,INE602A01031,2026-04-17
+PERSISTENT.NS,PERSISTENT,Persistent Systems Ltd.,Information Technology,nifty_it,mid,nifty200,INE262H01021,2026-04-17
+PETRONET.NS,PETRONET,Petronet LNG Ltd.,Oil Gas & Consumable Fuels,metals,mid,nifty500,INE347G01014,2026-04-17
+PFC.NS,PFC,Power Finance Corporation Ltd.,Financial Services,banking,large,nifty100,INE134E01011,2026-04-17
+PFIZER.NS,PFIZER,Pfizer Ltd.,Healthcare,pharma,mid,nifty500,INE182A01018,2026-04-17
+PGEL.NS,PGEL,PG Electroplast Ltd.,Consumer Durables,consumption,mid,nifty500,INE457L01029,2026-04-17
+PHOENIXLTD.NS,PHOENIXLTD,Phoenix Mills Ltd.,Realty,realty,mid,nifty200,INE211B01039,2026-04-17
+PIDILITIND.NS,PIDILITIND,Pidilite Industries Ltd.,Chemicals,chemicals,large,nifty100,INE318A01026,2026-04-17
+PIIND.NS,PIIND,PI Industries Ltd.,Chemicals,chemicals,mid,nifty200,INE603J01030,2026-04-17
+PINELABS.NS,PINELABS,Pine Labs Ltd.,Financial Services,banking,mid,nifty500,INE15B701018,2026-04-17
+PIRAMALFIN.NS,PIRAMALFIN,Piramal Finance Ltd.,Financial Services,banking,mid,nifty500,INE202B01038,2026-04-17
+PNB.NS,PNB,Punjab National Bank,Financial Services,banking,large,nifty100,INE160A01022,2026-04-17
+PNBHOUSING.NS,PNBHOUSING,PNB Housing Finance Ltd.,Financial Services,banking,mid,nifty500,INE572E01012,2026-04-17
+POLICYBZR.NS,POLICYBZR,PB Fintech Ltd.,Financial Services,banking,mid,nifty200,INE417T01026,2026-04-17
+POLYCAB.NS,POLYCAB,Polycab India Ltd.,Capital Goods,capex,mid,nifty200,INE455K01017,2026-04-17
+POLYMED.NS,POLYMED,Poly Medicure Ltd.,Healthcare,pharma,mid,nifty500,INE205C01021,2026-04-17
+POONAWALLA.NS,POONAWALLA,Poonawalla Fincorp Ltd.,Financial Services,banking,mid,nifty500,INE511C01022,2026-04-17
+POWERGRID.NS,POWERGRID,Power Grid Corporation of India Ltd.,Power,capex,large,nifty50,INE752E01010,2026-04-17
+POWERINDIA.NS,POWERINDIA,Hitachi Energy India Ltd.,Capital Goods,capex,mid,nifty200,INE07Y701011,2026-04-17
+PPLPHARMA.NS,PPLPHARMA,Piramal Pharma Ltd.,Healthcare,pharma,mid,nifty500,INE0DK501011,2026-04-17
+PREMIERENE.NS,PREMIERENE,Premier Energies Ltd.,Capital Goods,capex,mid,nifty200,INE0BS701011,2026-04-17
+PRESTIGE.NS,PRESTIGE,Prestige Estates Projects Ltd.,Realty,realty,mid,nifty200,INE811K01011,2026-04-17
+PTCIL.NS,PTCIL,PTC Industries Ltd.,Capital Goods,capex,mid,nifty500,INE596F01018,2026-04-17
+PVRINOX.NS,PVRINOX,PVR INOX Ltd.,Media Entertainment & Publication,media,mid,nifty500,INE191H01014,2026-04-17
+PWL.NS,PWL,Physicswallah Ltd.,Consumer Services,others,mid,nifty500,INE0LP301011,2026-04-17
+RADICO.NS,RADICO,Radico Khaitan Ltd,Fast Moving Consumer Goods,consumption,mid,nifty200,INE944F01028,2026-04-17
+RAILTEL.NS,RAILTEL,Railtel Corporation Of India Ltd.,Telecommunication,telecom,mid,nifty500,INE0DD101019,2026-04-17
+RAINBOW.NS,RAINBOW,Rainbow Childrens Medicare Ltd.,Healthcare,pharma,mid,nifty500,INE961O01016,2026-04-17
+RAMCOCEM.NS,RAMCOCEM,The Ramco Cements Ltd.,Construction Materials,others,mid,nifty500,INE331A01037,2026-04-17
+RBLBANK.NS,RBLBANK,RBL Bank Ltd.,Financial Services,banking,mid,nifty500,INE976G01028,2026-04-17
+RECLTD.NS,RECLTD,REC Ltd.,Financial Services,banking,large,nifty100,INE020B01018,2026-04-17
+REDINGTON.NS,REDINGTON,Redington Ltd.,Services,services,mid,nifty500,INE891D01026,2026-04-17
+RELIANCE.NS,RELIANCE,Reliance Industries Ltd.,Oil Gas & Consumable Fuels,metals,large,nifty50,INE002A01018,2026-04-17
+RHIM.NS,RHIM,RHI MAGNESITA INDIA LTD.,Capital Goods,capex,mid,nifty500,INE743M01012,2026-04-17
+RITES.NS,RITES,RITES Ltd.,Construction,capex,mid,nifty500,INE320J01015,2026-04-17
+RKFORGE.NS,RKFORGE,Ramkrishna Forgings Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE399G01023,2026-04-17
+RPOWER.NS,RPOWER,Reliance Power Ltd.,Power,capex,mid,nifty500,INE614G01033,2026-04-17
+RRKABEL.NS,RRKABEL,R R Kabel Ltd.,Capital Goods,capex,mid,nifty500,INE777K01022,2026-04-17
+RVNL.NS,RVNL,Rail Vikas Nigam Ltd.,Construction,capex,mid,nifty200,INE415G01027,2026-04-17
+SAGILITY.NS,SAGILITY,Sagility Ltd.,Information Technology,nifty_it,mid,nifty500,INE0W2G01015,2026-04-17
+SAIL.NS,SAIL,Steel Authority of India Ltd.,Metals & Mining,metals,mid,nifty200,INE114A01011,2026-04-17
+SAILIFE.NS,SAILIFE,Sai Life Sciences Ltd.,Healthcare,pharma,mid,nifty500,INE570L01029,2026-04-17
+SAMMAANCAP.NS,SAMMAANCAP,Sammaan Capital Ltd.,Financial Services,banking,mid,nifty500,INE148I01020,2026-04-17
+SAPPHIRE.NS,SAPPHIRE,Sapphire Foods India Ltd.,Consumer Services,others,mid,nifty500,INE806T01020,2026-04-17
+SARDAEN.NS,SARDAEN,Sarda Energy and Minerals Ltd.,Metals & Mining,metals,mid,nifty500,INE385C01021,2026-04-17
+SAREGAMA.NS,SAREGAMA,Saregama India Ltd,Media Entertainment & Publication,media,mid,nifty500,INE979A01025,2026-04-17
+SBFC.NS,SBFC,SBFC Finance Ltd.,Financial Services,banking,mid,nifty500,INE423Y01016,2026-04-17
+SBICARD.NS,SBICARD,SBI Cards and Payment Services Ltd.,Financial Services,banking,mid,nifty200,INE018E01016,2026-04-17
+SBILIFE.NS,SBILIFE,SBI Life Insurance Company Ltd.,Financial Services,banking,large,nifty50,INE123W01016,2026-04-17
+SBIN.NS,SBIN,State Bank of India,Financial Services,banking,large,nifty50,INE062A01020,2026-04-17
+SCHAEFFLER.NS,SCHAEFFLER,Schaeffler India Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE513A01022,2026-04-17
+SCI.NS,SCI,Shipping Corporation of India Ltd.,Services,services,mid,nifty500,INE109A01011,2026-04-17
+SHREECEM.NS,SHREECEM,Shree Cement Ltd.,Construction Materials,others,large,nifty100,INE070A01015,2026-04-17
+SHRIRAMFIN.NS,SHRIRAMFIN,Shriram Finance Ltd.,Financial Services,banking,large,nifty50,INE721A01047,2026-04-17
+SHYAMMETL.NS,SHYAMMETL,Shyam Metalics and Energy Ltd.,Capital Goods,capex,mid,nifty500,INE810G01011,2026-04-17
+SIEMENS.NS,SIEMENS,Siemens Ltd.,Capital Goods,capex,large,nifty100,INE003A01024,2026-04-17
+SIGNATURE.NS,SIGNATURE,Signatureglobal (India) Ltd.,Realty,realty,mid,nifty500,INE903U01023,2026-04-17
+SJVN.NS,SJVN,SJVN Ltd.,Power,capex,mid,nifty500,INE002L01015,2026-04-17
+SOBHA.NS,SOBHA,Sobha Ltd.,Realty,realty,mid,nifty500,INE671H01015,2026-04-17
+SOLARINDS.NS,SOLARINDS,Solar Industries India Ltd.,Chemicals,chemicals,large,nifty100,INE343H01029,2026-04-17
+SONACOMS.NS,SONACOMS,Sona BLW Precision Forgings Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE073K01018,2026-04-17
+SONATSOFTW.NS,SONATSOFTW,Sonata Software Ltd.,Information Technology,nifty_it,mid,nifty500,INE269A01021,2026-04-17
+SPLPETRO.NS,SPLPETRO,Supreme Petrochem Ltd.,Chemicals,chemicals,mid,nifty500,INE663A01033,2026-04-17
+SRF.NS,SRF,SRF Ltd.,Chemicals,chemicals,mid,nifty200,INE647A01010,2026-04-17
+STARHEALTH.NS,STARHEALTH,Star Health and Allied Insurance Company Ltd.,Financial Services,banking,mid,nifty500,INE575P01011,2026-04-17
+SUMICHEM.NS,SUMICHEM,Sumitomo Chemical India Ltd.,Chemicals,chemicals,mid,nifty500,INE258G01013,2026-04-17
+SUNDARMFIN.NS,SUNDARMFIN,Sundaram Finance Ltd.,Financial Services,banking,mid,nifty500,INE660A01013,2026-04-17
+SUNPHARMA.NS,SUNPHARMA,Sun Pharmaceutical Industries Ltd.,Healthcare,pharma,large,nifty50,INE044A01036,2026-04-17
+SUNTV.NS,SUNTV,Sun TV Network Ltd.,Media Entertainment & Publication,media,mid,nifty500,INE424H01027,2026-04-17
+SUPREMEIND.NS,SUPREMEIND,Supreme Industries Ltd.,Capital Goods,capex,mid,nifty200,INE195A01028,2026-04-17
+SUZLON.NS,SUZLON,Suzlon Energy Ltd.,Capital Goods,capex,mid,nifty200,INE040H01021,2026-04-17
+SWANCORP.NS,SWANCORP,Swan Corp Ltd.,Chemicals,chemicals,mid,nifty500,INE665A01038,2026-04-17
+SWIGGY.NS,SWIGGY,Swiggy Ltd.,Consumer Services,others,mid,nifty200,INE00H001014,2026-04-17
+SYNGENE.NS,SYNGENE,Syngene International Ltd.,Healthcare,pharma,mid,nifty500,INE398R01022,2026-04-17
+SYRMA.NS,SYRMA,Syrma SGS Technology Ltd.,Capital Goods,capex,mid,nifty500,INE0DYJ01015,2026-04-17
+TARIL.NS,TARIL,Transformers And Rectifiers (India) Ltd.,Capital Goods,capex,mid,nifty500,INE763I01026,2026-04-17
+TATACAP.NS,TATACAP,Tata Capital Ltd.,Financial Services,banking,large,nifty100,INE976I01016,2026-04-17
+TATACHEM.NS,TATACHEM,Tata Chemicals Ltd.,Chemicals,chemicals,mid,nifty500,INE092A01019,2026-04-17
+TATACOMM.NS,TATACOMM,Tata Communications Ltd.,Telecommunication,telecom,mid,nifty200,INE151A01013,2026-04-17
+TATACONSUM.NS,TATACONSUM,Tata Consumer Products Ltd.,Fast Moving Consumer Goods,consumption,large,nifty50,INE192A01025,2026-04-17
+TATAELXSI.NS,TATAELXSI,Tata Elxsi Ltd.,Information Technology,nifty_it,mid,nifty200,INE670A01012,2026-04-17
+TATAINVEST.NS,TATAINVEST,Tata Investment Corporation Ltd.,Financial Services,banking,mid,nifty200,INE672A01026,2026-04-17
+TATAPOWER.NS,TATAPOWER,Tata Power Co. Ltd.,Power,capex,large,nifty100,INE245A01021,2026-04-17
+TATASTEEL.NS,TATASTEEL,Tata Steel Ltd.,Metals & Mining,metals,large,nifty50,INE081A01020,2026-04-17
+TATATECH.NS,TATATECH,Tata Technologies Ltd.,Information Technology,nifty_it,mid,nifty500,INE142M01025,2026-04-17
+TBOTEK.NS,TBOTEK,TBO Tek Ltd.,Consumer Services,others,mid,nifty500,INE673O01025,2026-04-17
+TCS.NS,TCS,Tata Consultancy Services Ltd.,Information Technology,nifty_it,large,nifty50,INE467B01029,2026-04-17
+TECHM.NS,TECHM,Tech Mahindra Ltd.,Information Technology,nifty_it,large,nifty50,INE669C01036,2026-04-17
+TECHNOE.NS,TECHNOE,Techno Electric & Engineering Company Ltd.,Construction,capex,mid,nifty500,INE285K01026,2026-04-17
+TEGA.NS,TEGA,Tega Industries Ltd.,Capital Goods,capex,mid,nifty500,INE011K01018,2026-04-17
+TEJASNET.NS,TEJASNET,Tejas Networks Ltd.,Telecommunication,telecom,mid,nifty500,INE010J01012,2026-04-17
+TENNIND.NS,TENNIND,Tenneco Clean Air India Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE19RI01016,2026-04-17
+THELEELA.NS,THELEELA,Leela Palaces Hotels & Resorts Ltd.,Consumer Services,others,mid,nifty500,INE0AQ201015,2026-04-17
+THERMAX.NS,THERMAX,Thermax Ltd.,Capital Goods,capex,mid,nifty500,INE152A01029,2026-04-17
+TIINDIA.NS,TIINDIA,Tube Investments of India Ltd.,Automobile and Auto Components,auto,mid,nifty200,INE974X01010,2026-04-17
+TIMKEN.NS,TIMKEN,Timken India Ltd.,Capital Goods,capex,mid,nifty500,INE325A01013,2026-04-17
+TITAGARH.NS,TITAGARH,Titagarh Rail Systems Ltd.,Capital Goods,capex,mid,nifty500,INE615H01020,2026-04-17
+TITAN.NS,TITAN,Titan Company Ltd.,Consumer Durables,consumption,large,nifty50,INE280A01028,2026-04-17
+TMCV.NS,TMCV,Tata Motors Ltd.,Capital Goods,capex,large,nifty100,INE1TAE01010,2026-04-17
+TMPV.NS,TMPV,Tata Motors Passenger Vehicles Ltd.,Automobile and Auto Components,auto,large,nifty50,INE155A01022,2026-04-17
+TORNTPHARM.NS,TORNTPHARM,Torrent Pharmaceuticals Ltd.,Healthcare,pharma,large,nifty100,INE685A01028,2026-04-17
+TORNTPOWER.NS,TORNTPOWER,Torrent Power Ltd.,Power,capex,mid,nifty500,INE813H01021,2026-04-17
+TRAVELFOOD.NS,TRAVELFOOD,Travel Food Services Ltd.,Consumer Services,others,mid,nifty500,INE103V01028,2026-04-17
+TRENT.NS,TRENT,Trent Ltd.,Consumer Services,others,large,nifty50,INE849A01020,2026-04-17
+TRIDENT.NS,TRIDENT,Trident Ltd.,Textiles,consumption,mid,nifty500,INE064C01022,2026-04-17
+TRITURBINE.NS,TRITURBINE,Triveni Turbine Ltd.,Capital Goods,capex,mid,nifty500,INE152M01016,2026-04-17
+TTML.NS,TTML,Tata Teleservices (Maharashtra) Ltd.,Telecommunication,telecom,mid,nifty500,INE517B01013,2026-04-17
+TVSMOTOR.NS,TVSMOTOR,TVS Motor Company Ltd.,Automobile and Auto Components,auto,large,nifty100,INE494B01023,2026-04-17
+UBL.NS,UBL,United Breweries Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE686F01025,2026-04-17
+UCOBANK.NS,UCOBANK,UCO Bank,Financial Services,banking,mid,nifty500,INE691A01018,2026-04-17
+ULTRACEMCO.NS,ULTRACEMCO,UltraTech Cement Ltd.,Construction Materials,others,large,nifty50,INE481G01011,2026-04-17
+UNIONBANK.NS,UNIONBANK,Union Bank of India,Financial Services,banking,large,nifty100,INE692A01016,2026-04-17
+UNITDSPR.NS,UNITDSPR,United Spirits Ltd.,Fast Moving Consumer Goods,consumption,large,nifty100,INE854D01024,2026-04-17
+UNOMINDA.NS,UNOMINDA,UNO Minda Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE405E01023,2026-04-17
+UPL.NS,UPL,UPL Ltd.,Chemicals,chemicals,mid,nifty200,INE628A01036,2026-04-17
+URBANCO.NS,URBANCO,Urban Company Ltd.,Consumer Services,others,mid,nifty500,INE0CAZ01013,2026-04-17
+USHAMART.NS,USHAMART,Usha Martin Ltd.,Capital Goods,capex,mid,nifty500,INE228A01035,2026-04-17
+UTIAMC.NS,UTIAMC,UTI Asset Management Company Ltd.,Financial Services,banking,mid,nifty500,INE094J01016,2026-04-17
+VBL.NS,VBL,Varun Beverages Ltd.,Fast Moving Consumer Goods,consumption,large,nifty100,INE200M01039,2026-04-17
+VEDL.NS,VEDL,Vedanta Ltd.,Metals & Mining,metals,large,nifty100,INE205A01025,2026-04-17
+VIJAYA.NS,VIJAYA,Vijaya Diagnostic Centre Ltd.,Healthcare,pharma,mid,nifty500,INE043W01024,2026-04-17
+VMM.NS,VMM,Vishal Mega Mart Ltd.,Consumer Services,others,mid,nifty200,INE01EA01019,2026-04-17
+VOLTAS.NS,VOLTAS,Voltas Ltd.,Consumer Durables,consumption,mid,nifty200,INE226A01021,2026-04-17
+VTL.NS,VTL,Vardhman Textiles Ltd.,Textiles,consumption,mid,nifty500,INE825A01020,2026-04-17
+WAAREEENER.NS,WAAREEENER,Waaree Energies Ltd.,Capital Goods,capex,mid,nifty200,INE377N01017,2026-04-17
+WELCORP.NS,WELCORP,Welspun Corp Ltd.,Capital Goods,capex,mid,nifty500,INE191B01025,2026-04-17
+WELSPUNLIV.NS,WELSPUNLIV,Welspun Living Ltd.,Textiles,consumption,mid,nifty500,INE192B01031,2026-04-17
+WHIRLPOOL.NS,WHIRLPOOL,Whirlpool of India Ltd.,Consumer Durables,consumption,mid,nifty500,INE716A01013,2026-04-17
+WIPRO.NS,WIPRO,Wipro Ltd.,Information Technology,nifty_it,large,nifty50,INE075A01022,2026-04-17
+WOCKPHARMA.NS,WOCKPHARMA,Wockhardt Ltd.,Healthcare,pharma,mid,nifty500,INE049B01025,2026-04-17
+YESBANK.NS,YESBANK,Yes Bank Ltd.,Financial Services,banking,mid,nifty200,INE528G01035,2026-04-17
+ZEEL.NS,ZEEL,Zee Entertainment Enterprises Ltd.,Media Entertainment & Publication,media,mid,nifty500,INE256A01028,2026-04-17
+ZENSARTECH.NS,ZENSARTECH,Zensar Technolgies Ltd.,Information Technology,nifty_it,mid,nifty500,INE520A01027,2026-04-17
+ZENTEC.NS,ZENTEC,Zen Technologies Ltd.,Capital Goods,capex,mid,nifty500,INE251B01027,2026-04-17
+ZFCVINDIA.NS,ZFCVINDIA,ZF Commercial Vehicle Control Systems India Ltd.,Automobile and Auto Components,auto,mid,nifty500,INE342J01019,2026-04-17
+ZYDUSLIFE.NS,ZYDUSLIFE,Zydus Lifesciences Ltd.,Healthcare,pharma,large,nifty100,INE010B01027,2026-04-17
+ZYDUSWELL.NS,ZYDUSWELL,Zydus Wellness Ltd.,Fast Moving Consumer Goods,consumption,mid,nifty500,INE768C01028,2026-04-17

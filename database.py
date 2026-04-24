@@ -185,37 +185,37 @@ def get_watchlist(status: str = None) -> List[Dict]:
         c = conn.cursor()
         if status:
             c.execute(
-                """
-                SELECT * FROM watchlist
-                WHERE status=?
-                ORDER BY entry_score DESC, id DESC
-                """,
+                "SELECT * FROM watchlist WHERE status=? ORDER BY id DESC",
                 (status,),
             )
         else:
-            c.execute(
-                """
-                SELECT * FROM watchlist
-                ORDER BY id DESC
-                """
-            )
+            c.execute("SELECT * FROM watchlist ORDER BY id DESC")
 
         rows = [dict(row) for row in c.fetchall()]
 
-        # De-duplicate active symbols for dashboard/monitoring views.
-        deduped = []
-        seen_active = set()
+        # Deduplicate: keep only one row per symbol.
+        # For active symbols: keep the most recent active row.
+        # For closed symbols: keep only the most recent closed row.
+        # This ensures active/closed/all tabs are always consistent.
+        seen = {}  # symbol -> best row
         for row in rows:
-            symbol = row.get("symbol")
+            sym = row.get("symbol")
             is_active = row.get("status") not in ("CLOSED", "EXIT")
-            if is_active:
-                if symbol in seen_active:
-                    continue
-                seen_active.add(symbol)
-            deduped.append(row)
+            if sym not in seen:
+                seen[sym] = row
+            else:
+                existing = seen[sym]
+                existing_active = existing.get("status") not in ("CLOSED", "EXIT")
+                # Active always beats closed
+                if is_active and not existing_active:
+                    seen[sym] = row
+                # Among same type, keep higher id (more recent)
+                elif is_active == existing_active and row["id"] > existing["id"]:
+                    seen[sym] = row
 
-        deduped.sort(key=lambda r: (r.get("entry_score") or 0), reverse=True)
-        return deduped
+        result = list(seen.values())
+        result.sort(key=lambda r: (r.get("entry_score") or 0), reverse=True)
+        return result
     finally:
         conn.close()
 
@@ -253,6 +253,7 @@ def update_watchlist_status(symbol: str, status: str, notes: str = ""):
 
 
 def remove_from_watchlist(symbol: str):
+    """Mark active positions as CLOSED (soft delete)."""
     conn = get_connection()
     try:
         conn.execute(
@@ -260,6 +261,17 @@ def remove_from_watchlist(symbol: str):
             (datetime.now().isoformat(), symbol.upper())
         )
         conn.commit()
+    finally:
+        conn.close()
+
+
+def hard_delete_watchlist_row(row_id: int):
+    """Permanently delete a single watchlist row by id (used for closed rows)."""
+    conn = get_connection()
+    try:
+        conn.execute("DELETE FROM watchlist WHERE id=?", (row_id,))
+        conn.commit()
+        logger.info(f"Hard deleted watchlist row id={row_id}")
     finally:
         conn.close()
 
@@ -330,20 +342,20 @@ def save_scan_result(symbol: str, entry_score: float, sentiment_score: float,
 
 
 def get_latest_scan_results(limit: int = 50) -> List[Dict]:
+    """Return the most recent scan result per symbol, ordered by entry_score."""
     conn = get_connection()
     try:
         c = conn.cursor()
+        # Get latest id per symbol first (compatible with all SQLite versions)
         c.execute("""
-            SELECT * FROM (
-                SELECT sr.*,
-                       ROW_NUMBER() OVER (
-                           PARTITION BY symbol
-                           ORDER BY scanned_at DESC, id DESC
-                       ) AS rn
-                FROM scan_results sr
-            ) latest
-            WHERE rn = 1
-            ORDER BY entry_score DESC, scanned_at DESC
+            SELECT sr.*
+            FROM scan_results sr
+            INNER JOIN (
+                SELECT symbol, MAX(id) AS max_id
+                FROM scan_results
+                GROUP BY symbol
+            ) latest ON sr.symbol = latest.symbol AND sr.id = latest.max_id
+            ORDER BY sr.entry_score DESC, sr.scanned_at DESC
             LIMIT ?
         """, (limit,))
         return [dict(row) for row in c.fetchall()]

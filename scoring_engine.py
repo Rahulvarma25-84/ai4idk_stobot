@@ -108,46 +108,132 @@ class ScoringEngine:
         self._reset_daily()
         self._alerted_today.add(symbol)
 
-    def apply_filters(self, symbol: str, signal: str, tech: dict) -> Tuple[str, list]:
+    def apply_filters(self, symbol: str, signal: str, tech: dict,
+                      cap_tier: str = "large", skip_dedup: bool = False) -> Tuple[str, list]:
         """
-        Apply Tier 1/2/3 filters.
+        Apply Tier 1/2/3 filters with cap-tier aware thresholds.
+        cap_tier: "large" | "mid" | "small" | "micro"
         Returns (final_signal, [reasons]) — if filtered, signal = 'FILTERED'.
         """
         if signal in ("SKIP", "WATCH"):
             return signal, []
 
         reasons = []
+        tier = cap_tier.lower() if cap_tier else "large"
+
+        # ── Cap-tier thresholds ────────────────────────────────────────
+        # Small/micro caps need stricter filters — more volatile, less liquid,
+        # more prone to manipulation and sharp reversals.
+        if tier in ("small", "micro"):
+            vol_min       = 1.5    # needs stronger volume confirmation
+            rsi_max       = 70     # overbought threshold lower (spikes reverse fast)
+            ma50_floor    = 0.97   # must be closer to MA50
+            regime_strict = True   # block ALL small/micro in bearish market
+        elif tier == "mid":
+            vol_min       = 1.3
+            rsi_max       = 73
+            ma50_floor    = 0.98
+            regime_strict = False
+        else:  # large
+            vol_min       = 1.2
+            rsi_max       = 75
+            ma50_floor    = 0.98
+            regime_strict = False
 
         # Tier 1a: Market regime
         regime = MarketRegime.get()
         if not regime["bullish"]:
-            reasons.append(f"Market bearish ({regime['pct_above_ma']:.1f}% below MA20)")
+            if regime_strict:
+                # Small/micro: hard block in any bearish condition
+                reasons.append(f"Market bearish — small/micro cap blocked ({regime['pct_above_ma']:.1f}% vs MA20)")
+            else:
+                reasons.append(f"Market bearish ({regime['pct_above_ma']:.1f}% below MA20)")
 
-        # Tier 1b: Volume confirmation (≥1.2×)
-        if tech.get("volume_ratio", 0) < 1.2:
-            reasons.append(f"Low volume ({tech.get('volume_ratio',0):.2f}× avg)")
+        # Tier 1b: Volume confirmation
+        if tech.get("volume_ratio", 0) < vol_min:
+            reasons.append(f"Low volume ({tech.get('volume_ratio',0):.2f}× avg, need {vol_min}×)")
 
         # Tier 1c: Price above MA50
         price, ma50 = tech.get("current_price", 0), tech.get("ma50", 0)
-        if ma50 > 0 and price < ma50 * 0.98:
+        if ma50 > 0 and price < ma50 * ma50_floor:
             reasons.append(f"Price below MA50 (₹{price:.0f} < ₹{ma50:.0f})")
 
         # Tier 1d: RSI not overbought
         rsi = tech.get("rsi", 50)
-        if rsi > 75:
-            reasons.append(f"RSI overbought ({rsi:.0f})")
+        if rsi > rsi_max:
+            reasons.append(f"RSI overbought ({rsi:.0f} > {rsi_max})")
+
+        # Tier 1e: Small/micro — additional liquidity check (ATR not exploding)
+        if tier in ("small", "micro"):
+            atr_ratio = tech.get("atr_ratio", 1.0)
+            if atr_ratio > 1.8:
+                reasons.append(f"ATR spike ({atr_ratio:.2f}×) — erratic price action")
 
         # Tier 2: Earnings blackout
         if symbol in EARNINGS_MONTHS.get(date.today().month, []):
             reasons.append("Earnings blackout period")
 
         # Tier 3: Duplicate suppression
-        if self.already_alerted(symbol):
+        if not skip_dedup and self.already_alerted(symbol):
             reasons.append("Already alerted today")
 
         if reasons:
             return "FILTERED", reasons
         return signal, []
+
+    # ── Cap-tier risk params ───────────────────────────────────────────────
+
+    @staticmethod
+    def cap_tier_params(cap_tier: str) -> dict:
+        """
+        Returns adjusted risk parameters per cap tier.
+        Small/micro caps need wider stops, better R:R, higher delivery threshold.
+        """
+        tier = (cap_tier or "large").lower()
+        if tier == "micro":
+            return {
+                "atr_sl_mult":      2.5,   # wider stop (more volatile)
+                "atr_target_mult":  4.0,   # bigger target needed to justify risk
+                "min_rr":           1.8,   # higher R:R requirement
+                "max_sl_pct":       0.88,  # max 12% loss floor
+                "min_target_pct":   1.08,  # min 8% upside
+                "delivery_min":     55,    # higher delivery threshold (manipulation risk)
+                "sentiment_weight": 0.15,  # news matters more for small/micro
+                "risk_cap_pct":     0.5,   # max 0.5% capital risk regardless of score
+            }
+        elif tier == "small":
+            return {
+                "atr_sl_mult":      2.0,
+                "atr_target_mult":  3.5,
+                "min_rr":           1.5,
+                "max_sl_pct":       0.90,  # max 10% loss floor
+                "min_target_pct":   1.07,
+                "delivery_min":     50,
+                "sentiment_weight": 0.12,
+                "risk_cap_pct":     0.75,
+            }
+        elif tier == "mid":
+            return {
+                "atr_sl_mult":      1.7,
+                "atr_target_mult":  3.0,
+                "min_rr":           1.3,
+                "max_sl_pct":       0.91,
+                "min_target_pct":   1.06,
+                "delivery_min":     45,
+                "sentiment_weight": 0.10,
+                "risk_cap_pct":     1.0,
+            }
+        else:  # large
+            return {
+                "atr_sl_mult":      1.5,
+                "atr_target_mult":  2.5,
+                "min_rr":           1.2,
+                "max_sl_pct":       0.92,
+                "min_target_pct":   1.05,
+                "delivery_min":     40,
+                "sentiment_weight": 0.10,
+                "risk_cap_pct":     1.5,
+            }
 
     # ── Entry Score ────────────────────────────────────────────────────────
 

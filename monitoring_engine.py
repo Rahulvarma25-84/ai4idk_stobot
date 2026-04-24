@@ -18,6 +18,7 @@ from trade_state import classify_trade_state, compute_opportunity_score, compute
 from delivery_engine import get_delivery_score
 
 logger = logging.getLogger(__name__)
+logging.getLogger("yfinance").setLevel(logging.CRITICAL)
 
 
 def _get_nifty_weakness() -> float:
@@ -130,7 +131,7 @@ class MonitoringEngine:
                     symbol, current_price, exit_score=100,
                     exit_reason="STOP_LOSS_HIT", entry_price=entry_price, qty=qty)
                 msg = (f"🛑 <b>STOP LOSS HIT: {symbol}</b>\n"
-                       f"Price: ₹{current_price:.2f} | SL: ₹{effective_sl:.2f}\n"
+                       f"Price: Rs {current_price:.2f} | SL: Rs {effective_sl:.2f}\n"
                        f"PnL: {pnl_pct:+.2f}%")
                 self.alert.send(msg)
                 results.append({"symbol": symbol, "decision": "EXIT",
@@ -144,7 +145,7 @@ class MonitoringEngine:
                     symbol, current_price, exit_score=0,
                     exit_reason="TARGET_HIT", entry_price=entry_price, qty=qty)
                 msg = (f"🎯 <b>TARGET HIT: {symbol}</b>\n"
-                       f"Price: ₹{current_price:.2f} | Target: ₹{target:.2f}\n"
+                       f"Price: Rs {current_price:.2f} | Target: Rs {target:.2f}\n"
                        f"Profit: +{pnl_pct:.2f}%")
                 self.alert.send(msg)
                 results.append({"symbol": symbol, "decision": "EXIT",
@@ -208,22 +209,31 @@ class MonitoringEngine:
                         exit_reason="EXIT_SIGNAL", entry_price=entry_price, qty=qty)
                     msg = (f"⚠️ <b>EXIT SIGNAL: {symbol}</b>\n"
                            f"Exit Score: {exit_score:.0f}/100\n"
-                           f"Price: ₹{current_price:.2f} | PnL: {pnl_pct:+.2f}%\n"
+                           f"Price: Rs {current_price:.2f} | PnL: {pnl_pct:+.2f}%\n"
                            f"{state_result.reason}")
                     self.alert.send(msg)
                 else:
                     msg = (f"🟡 <b>CAUTION: {symbol}</b>\n"
                            f"Exit Score: {exit_score:.0f}/100 | State: WEAK\n"
-                           f"Price: ₹{current_price:.2f} | PnL: {pnl_pct:+.2f}%\n"
+                           f"Price: Rs {current_price:.2f} | PnL: {pnl_pct:+.2f}%\n"
                            f"{state_result.reason}")
                     self.alert.send(msg)
 
             elif state_result.state == "STRONG" and new_trailing > stop_loss:
                 # Notify trailing stop update silently (no alert spam)
-                logger.info(f"TRAIL {symbol}: SL moved to ₹{new_trailing:.2f}")
+                logger.info(f"TRAIL {symbol}: SL moved to Rs {new_trailing:.2f}")
 
             logger.info(f"Monitor {symbol}: exit={exit_score:.0f} opp={opp_score:.0f} "
                         f"state={state_result.state} pnl={pnl_pct:+.1f}%")
+
+        if results:
+            weak_count = sum(1 for r in results if r.get("trade_state") == "WEAK")
+            exit_count = sum(1 for r in results if r.get("decision") == "EXIT")
+            hold_count = sum(1 for r in results if r.get("decision") == "HOLD")
+            self.alert.send(
+                f"Monitor Summary: {len(results)} checked | "
+                f"HOLD: {hold_count} | EXIT: {exit_count} | WEAK: {weak_count}"
+            )
 
         return results
 
@@ -232,7 +242,7 @@ class MonitoringEngine:
             print("\n  No active positions.\n")
             return
         print(f"\n{'='*90}")
-        print(f"  MONITORING REPORT — {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+        print(f"  MONITORING REPORT - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
         print(f"{'='*90}")
         print(f"  {'Symbol':<14} {'Price':>8} {'PnL%':>7} {'Exit':>6} {'Opp':>6} {'State':<10} {'Action'}")
         print(f"  {'-'*84}")

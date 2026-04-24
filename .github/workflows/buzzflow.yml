@@ -6,15 +6,17 @@ on:
     - cron: "0 7 * * 1-5"    # 12:30 PM IST — Midday monitor
     - cron: "30 8 * * 1-5"   # 2:00 PM IST — Replacement scan
     - cron: "0 9 * * 1-5"    # 2:30 PM IST — Afternoon monitor
+    - cron: "30 2 * * 1-5"   # 8:00 AM IST — Market sentiment check (before scan)
+    - cron: "0 2 1 * *"      # 1st of every month — refresh universe CSV
 
   workflow_dispatch:
     inputs:
       mode:
-        description: "scan | monitor | replacement | all"
+        description: "scan | monitor | replacement | update_universe | sentiment"
         required: true
         default: "scan"
       index:
-        description: "nifty_50 | banking | nifty_it | pharma | auto | capex | consumption | metals | chemicals | all"
+        description: "all | large | mid | nifty50 | banking | pharma | nifty_it | auto | capex | consumption | metals | chemicals"
         required: false
         default: "all"
       min_score:
@@ -22,99 +24,184 @@ on:
         required: false
         default: "65"
 
+# Shared env for all jobs
+env:
+  BUZZFLOW_DB: buzzflow.db
+  DB_CACHE_KEY: buzzflow-db-${{ github.ref_name }}
+
 jobs:
+
+  # ── Market Sentiment Check ────────────────────────────────────────────────
+  market-sentiment:
+    name: Market Sentiment (8:00 AM IST)
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '30 2 * * 1-5') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'sentiment')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run market sentiment analysis
+        env:
+          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python monitor.py --sentiment
+
+  # ── Morning Scan ─────────────────────────────────────────────────────────
   morning-scan:
     name: Morning Scan (8:30 AM IST)
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'schedule' && github.event.schedule == '0 3 * * 1-5') ||
-      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["scan","all"]'), github.event.inputs.mode))
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'scan')
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11", cache: "pip" }
-      - run: pip install -r requirements.txt
-      - name: Restore BuzzFlow DB cache
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore DB
         uses: actions/cache/restore@v4
         with:
           path: buzzflow.db
-          key: buzzflow-db-${{ github.run_id }}-${{ github.job }}
-          restore-keys: |
-            buzzflow-db-
+          key: buzzflow-db-${{ github.ref_name }}-latest
+          restore-keys: buzzflow-db-${{ github.ref_name }}-
+
       - name: Run morning scan
         env:
           TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          BUZZFLOW_DB:      buzzflow.db
         run: |
           python scanner_v2.py \
-            --index ${{ github.event.inputs.index || 'all' }} \
+            --index "${{ github.event.inputs.index || 'all' }}" \
             --min-score ${{ github.event.inputs.min_score || '65' }} \
             --max-results 10 \
             --auto-watchlist \
             --alert
-      - name: Save BuzzFlow DB cache
+
+      - name: Save DB
         uses: actions/cache/save@v4
+        if: always()
         with:
           path: buzzflow.db
-          key: buzzflow-db-${{ github.run_id }}-${{ github.job }}
+          key: buzzflow-db-${{ github.ref_name }}-${{ github.run_id }}
 
+  # ── Midday / Afternoon Monitor ────────────────────────────────────────────
   monitor:
     name: Position Monitor
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'schedule' && (github.event.schedule == '0 7 * * 1-5' || github.event.schedule == '0 9 * * 1-5')) ||
-      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["monitor","all"]'), github.event.inputs.mode))
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'monitor')
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11", cache: "pip" }
-      - run: pip install -r requirements.txt
-      - name: Restore BuzzFlow DB cache
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore DB
         uses: actions/cache/restore@v4
         with:
           path: buzzflow.db
-          key: buzzflow-db-${{ github.run_id }}-${{ github.job }}
-          restore-keys: |
-            buzzflow-db-
+          key: buzzflow-db-${{ github.ref_name }}-latest
+          restore-keys: buzzflow-db-${{ github.ref_name }}-
+
       - name: Run monitor
         env:
           TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          BUZZFLOW_DB:      buzzflow.db
         run: python monitor.py
-      - name: Save BuzzFlow DB cache
+
+      - name: Save DB
         uses: actions/cache/save@v4
+        if: always()
         with:
           path: buzzflow.db
-          key: buzzflow-db-${{ github.run_id }}-${{ github.job }}
+          key: buzzflow-db-${{ github.ref_name }}-${{ github.run_id }}
 
+  # ── Replacement Scan ──────────────────────────────────────────────────────
   replacement:
     name: Replacement Scan (2:00 PM IST)
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'schedule' && github.event.schedule == '30 8 * * 1-5') ||
-      (github.event_name == 'workflow_dispatch' && contains(fromJSON('["replacement","all"]'), github.event.inputs.mode))
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'replacement')
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
-        with: { python-version: "3.11", cache: "pip" }
-      - run: pip install -r requirements.txt
-      - name: Restore BuzzFlow DB cache
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore DB
         uses: actions/cache/restore@v4
         with:
           path: buzzflow.db
-          key: buzzflow-db-${{ github.run_id }}-${{ github.job }}
-          restore-keys: |
-            buzzflow-db-
+          key: buzzflow-db-${{ github.ref_name }}-latest
+          restore-keys: buzzflow-db-${{ github.ref_name }}-
+
       - name: Run replacement scan
         env:
           TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          BUZZFLOW_DB:      buzzflow.db
         run: python monitor.py --replacement
-      - name: Save BuzzFlow DB cache
+
+      - name: Save DB
         uses: actions/cache/save@v4
+        if: always()
         with:
           path: buzzflow.db
-          key: buzzflow-db-${{ github.run_id }}-${{ github.job }}
+          key: buzzflow-db-${{ github.ref_name }}-${{ github.run_id }}
+
+  # ── Monthly Universe Update ───────────────────────────────────────────────
+  update-universe:
+    name: Update Universe CSV (Monthly)
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'schedule' && github.event.schedule == '0 2 1 * *') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'update_universe')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Update universe CSV from NSE
+        run: python update_universe.py
+
+      - name: Commit updated CSV
+        run: |
+          git config user.name  "BuzzFlow Bot"
+          git config user.email "buzzflow@users.noreply.github.com"
+          git add data/universe.csv
+          git diff --staged --quiet || git commit -m "chore: update universe CSV [$(date +%Y-%m-%d)]"
+          git push

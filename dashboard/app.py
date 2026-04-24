@@ -34,6 +34,7 @@ from performance_engine import compute_performance
 from scoring_engine import MarketRegime
 from universe_engine import get_universe_stats, get_universe_df
 from alert_engine import AlertEngine
+from market_regime_engine import get_market_sentiment, format_sentiment_alert
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -65,6 +66,17 @@ def index():
 @app.route("/api/market")
 def market():
     return jsonify(MarketRegime.get())
+
+
+@app.route("/api/market/sentiment")
+def market_sentiment():
+    """
+    Full multi-signal market sentiment analysis.
+    Includes composite score, regime, bearish warning, and all 6 signal scores.
+    Pass ?force=1 to bypass 2-hour cache.
+    """
+    force = request.args.get("force", "0") == "1"
+    return jsonify(get_market_sentiment(force=force))
 
 
 @app.route("/api/health")
@@ -160,7 +172,25 @@ def close_position(symbol):
 
 @app.route("/api/watchlist/<symbol>", methods=["DELETE"])
 def delete_watchlist(symbol):
-    remove_from_watchlist(symbol.upper())
+    """
+    For active positions: soft-close (status=CLOSED).
+    For already-closed positions: hard delete the row by id.
+    Accepts optional ?id=<row_id> to target a specific row.
+    """
+    from database import hard_delete_watchlist_row
+    row_id = request.args.get("id", type=int)
+
+    items = get_watchlist()
+    pos = next((w for w in items if w["symbol"] == symbol.upper()), None)
+
+    if pos and pos.get("status") in ("CLOSED", "EXIT"):
+        # Already closed — hard delete this specific row
+        target_id = row_id or pos["id"]
+        hard_delete_watchlist_row(target_id)
+    else:
+        # Active — soft close
+        remove_from_watchlist(symbol.upper())
+
     return jsonify({"message": f"Removed {symbol}"})
 
 

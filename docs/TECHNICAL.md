@@ -24,7 +24,7 @@ Semi-automated swing trading assistant for NSE. Scans stocks, scores them, monit
 
 ```
 08:30 AM  scanner_v2.py
-          Phase 1: technical pre-filter on 499 stocks (20 workers, ~3s)
+          Phase 1: technical pre-filter on 499 stocks (20 workers, ~3s) 
           Phase 2: full analysis + news on top 50 candidates (5 workers, ~40s)
           → saves to scan_results table
           → adds BUY signals to watchlist

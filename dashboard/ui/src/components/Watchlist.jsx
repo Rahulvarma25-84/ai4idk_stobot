@@ -36,10 +36,11 @@ export default function Watchlist() {
   const [monitoring, setMonitoring] = useState(false);
   const toast = useToast();
 
-  const items  = data || [];
-  const active = items.filter(w => !["CLOSED","EXIT"].includes(w.status));
+  const items   = data || [];
+  const active  = items.filter(w => !["CLOSED","EXIT"].includes(w.status));
+  const closed  = items.filter(w => ["CLOSED","EXIT"].includes(w.status));
   const filtered = filter === "active" ? active
-    : filter === "closed" ? items.filter(w => ["CLOSED","EXIT"].includes(w.status))
+    : filter === "closed" ? closed
     : items;
 
   const strong  = active.filter(w => w.trade_state === "STRONG").length;
@@ -53,9 +54,10 @@ export default function Watchlist() {
     refetch();
   }
 
-  async function deleteStock(symbol) {
+  async function deleteStock(symbol, id) {
     if (!confirm(`Remove ${symbol}?`)) return;
-    await api.delete(`/watchlist/${symbol}`);
+    const url = id ? `/watchlist/${symbol}?id=${id}` : `/watchlist/${symbol}`;
+    await api.delete(url);
     toast(`${symbol} removed`, "info");
     refetch();
   }
@@ -120,9 +122,13 @@ export default function Watchlist() {
       </div>
 
       <div className="pills">
-        {["active","closed","all"].map(f => (
-          <button key={f} className={`pill ${filter===f?"active":""}`} onClick={() => setFilter(f)}>
-            {f.charAt(0).toUpperCase()+f.slice(1)}{f==="active"?` (${active.length})`:""}
+        {[
+          { key:"active", label:`Active (${active.length})` },
+          { key:"closed", label:`Closed (${closed.length})` },
+          { key:"all",    label:`All (${items.length})` },
+        ].map(f => (
+          <button key={f.key} className={`pill ${filter===f.key?"active":""}`} onClick={() => setFilter(f.key)}>
+            {f.label}
           </button>
         ))}
       </div>
@@ -199,7 +205,7 @@ export default function Watchlist() {
                               </select>
                             </>
                           )}
-                          <button className="btn btn-sm" onClick={() => deleteStock(w.symbol)} title="Remove">🗑</button>
+                          <button className="btn btn-sm" onClick={() => deleteStock(w.symbol, w.id)} title="Remove">🗑</button>
                         </div>
                       </td>
                     </tr>
