@@ -32,12 +32,13 @@ _HEADERS = {
 
 # NSE archives — free, no auth, no cookies needed
 _NSE_CSVS = {
-    "nifty50":     "https://archives.nseindia.com/content/indices/ind_nifty50list.csv",
-    "nifty100":    "https://archives.nseindia.com/content/indices/ind_nifty100list.csv",
-    "nifty200":    "https://archives.nseindia.com/content/indices/ind_nifty200list.csv",
-    "nifty500":    "https://archives.nseindia.com/content/indices/ind_nifty500list.csv",
-    "midcap150":   "https://archives.nseindia.com/content/indices/ind_niftymidcap150list.csv",
-    "smallcap250": "https://archives.nseindia.com/content/indices/ind_niftysmallcap250list.csv",
+    "nifty50":      "https://archives.nseindia.com/content/indices/ind_nifty50list.csv",
+    "nifty100":     "https://archives.nseindia.com/content/indices/ind_nifty100list.csv",
+    "nifty200":     "https://archives.nseindia.com/content/indices/ind_nifty200list.csv",
+    "nifty500":     "https://archives.nseindia.com/content/indices/ind_nifty500list.csv",
+    "midcap150":    "https://archives.nseindia.com/content/indices/ind_niftymidcap150list.csv",
+    "smallcap250":  "https://archives.nseindia.com/content/indices/ind_niftysmallcap250list.csv",
+    "microcap250":  "https://archives.nseindia.com/content/indices/ind_niftymicrocap250_list.csv",
 }
 
 # Sector → category mapping (for scan filters)
@@ -115,12 +116,25 @@ def update():
     if "series" in combined.columns:
         combined = combined[combined["series"].str.strip() == "EQ"]
 
-    # Deduplicate — keep the row from the broadest index (nifty500 > midcap150 etc.)
+    # Deduplicate — one row per symbol.
+    # Keep the row from the most specific/smallest index for index_name field.
+    # But cap_tier is assigned separately based on dedicated tier indices.
     index_priority = {"nifty50":1,"nifty100":2,"nifty200":3,"nifty500":4,"midcap150":5,"smallcap250":6}
     combined["_priority"] = combined["index_name"].map(index_priority).fillna(9)
+
+    # Collect all indices per symbol BEFORE dedup
+    all_indices = (
+        combined.groupby("symbol")["index_name"]
+        .apply(set)
+        .reset_index()
+        .rename(columns={"index_name": "all_indices"})
+    )
+
+    # Keep the row from the smallest/most specific index
     combined = combined.sort_values("_priority")
     combined = combined.drop_duplicates(subset="symbol", keep="first")
     combined = combined.drop(columns=["_priority"])
+    combined = combined.merge(all_indices, on="symbol", how="left")
 
     # Add Yahoo Finance ticker (append .NS)
     combined["ticker"] = combined["symbol"].str.strip().str.upper() + ".NS"
@@ -129,12 +143,28 @@ def update():
     combined["industry"] = combined["industry"].str.strip()
     combined["category"] = combined["industry"].map(_SECTOR_CATEGORY).fillna("others")
 
-    # Add market cap tier based on index membership
-    def _cap_tier(idx):
-        if idx in ("nifty50","nifty100"):   return "large"
-        if idx in ("nifty200","nifty500"):  return "mid"
-        return "small"
-    combined["cap_tier"] = combined["index_name"].apply(_cap_tier)
+    # ── Cap tier assignment ────────────────────────────────────────────────
+    # NSE's Nifty500 = Nifty50 + Nifty Midcap150 + Nifty Smallcap250 (by design).
+    # TotalMarket = Nifty500 + Microcap250 (251 exclusive stocks).
+    # Use dedicated tier indices as source of truth:
+    #   nifty50 / nifty100   → large
+    #   midcap150            → mid   (even if also in nifty200/500)
+    #   smallcap250          → small (even if also in nifty500)
+    #   microcap250          → micro (exclusive, not in nifty500)
+    #   nifty200/500 only    → mid   (borderline, treat as mid)
+    def _cap_tier(indices: set) -> str:
+        if indices & {"nifty50", "nifty100"}:
+            return "large"
+        if "microcap250" in indices:
+            return "micro"
+        if "smallcap250" in indices:
+            return "small"
+        if "midcap150" in indices:
+            return "mid"
+        return "mid"
+
+    combined["cap_tier"] = combined["all_indices"].apply(_cap_tier)
+    combined = combined.drop(columns=["all_indices"])
 
     # Add metadata
     combined["updated_at"] = datetime.now().strftime("%Y-%m-%d")
@@ -149,6 +179,13 @@ def update():
     logger.info(f"\nSaved {len(combined)} stocks to {OUT_PATH}")
     logger.info(f"Categories: {combined['category'].value_counts().to_dict()}")
     logger.info(f"Cap tiers:  {combined['cap_tier'].value_counts().to_dict()}")
+
+    # Invalidate in-process cache so scanner picks up new data immediately
+    try:
+        from universe_engine import _invalidate_cache
+        _invalidate_cache()
+    except Exception:
+        pass
     print(f"\nDone. {len(combined)} stocks in {OUT_PATH}")
     print(combined[["ticker","company","industry","category","cap_tier"]].head(10).to_string(index=False))
 

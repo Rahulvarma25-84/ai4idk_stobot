@@ -22,6 +22,12 @@ UNIVERSE_CSV = Path("data/universe.csv")
 _cache: Optional[pd.DataFrame] = None
 
 
+def _invalidate_cache():
+    """Call this after updating universe.csv to force reload on next access."""
+    global _cache
+    _cache = None
+
+
 def _load() -> pd.DataFrame:
     global _cache
     if _cache is not None:
@@ -93,12 +99,13 @@ def get_categories() -> List[str]:
 def get_universe_stats() -> Dict:
     df = _load()
     return {
-        "total":      len(df),
-        "large_cap":  len(df[df["cap_tier"] == "large"]),
-        "mid_cap":    len(df[df["cap_tier"] == "mid"]),
-        "small_cap":  len(df[df["cap_tier"] == "small"]),
-        "categories": df["category"].value_counts().to_dict(),
-        "updated_at": df["updated_at"].iloc[0] if "updated_at" in df.columns else "unknown",
+        "total":       len(df),
+        "large_cap":   len(df[df["cap_tier"] == "large"]),
+        "mid_cap":     len(df[df["cap_tier"] == "mid"]),
+        "small_cap":   len(df[df["cap_tier"] == "small"]),
+        "micro_cap":   len(df[df["cap_tier"] == "micro"]),
+        "categories":  df["category"].value_counts().to_dict(),
+        "updated_at":  df["updated_at"].iloc[0] if "updated_at" in df.columns else "unknown",
     }
 
 
