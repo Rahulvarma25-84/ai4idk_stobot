@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "scan | monitor | replacement | update_universe | sentiment"
+        description: "scan | monitor | replacement | update_universe | sentiment | telegram_bot"
         required: true
         default: "scan"
       index:
@@ -205,3 +205,41 @@ jobs:
           git add data/universe.csv
           git diff --staged --quiet || git commit -m "chore: update universe CSV [$(date +%Y-%m-%d)]"
           git push
+
+  # ── Telegram Bot (long-running, manual trigger only) ─────────────────────
+  telegram-bot:
+    name: Telegram Command Bot
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' && github.event.inputs.mode == 'telegram_bot'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore DB
+        uses: actions/cache/restore@v4
+        with:
+          path: buzzflow.db
+          key: buzzflow-db-${{ github.ref_name }}-latest
+          restore-keys: buzzflow-db-${{ github.ref_name }}-
+
+      - name: Run Telegram bot (6 hour window)
+        env:
+          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        timeout-minutes: 360
+        run: python telegram_bot.py
+
+      - name: Save DB
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: buzzflow.db
+          key: buzzflow-db-${{ github.ref_name }}-${{ github.run_id }}
